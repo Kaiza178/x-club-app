@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>X club Terminal</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        :root {
+            --bg: #0d0f0e;
+            --card: #161a18;
+            --green: #2ecc71;
+            --green-dark: #27ae60;
+            --text: #f0f4f2;
+            --muted: #8a9992;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 16px; padding-bottom: 80px; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #252b28; padding-bottom: 12px; }
+        .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
+        .logo span { color: var(--green); }
+        .badge { background: rgba(46, 204, 113, 0.15); color: var(--green); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+
+        .card { background: var(--card); border-radius: 14px; padding: 16px; margin-bottom: 16px; border: 1px solid #222825; }
+        .card h2 { font-size: 18px; margin-bottom: 8px; color: var(--green); }
+        .card p { font-size: 14px; color: var(--muted); line-height: 1.4; margin-bottom: 10px; }
+        
+        .btn { display: block; width: 100%; background: var(--green); color: #000; text-align: center; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 15px; border: none; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .btn:active { transform: scale(0.98); background: var(--green-dark); }
+        .btn-outline { background: transparent; border: 1px solid var(--green); color: var(--green); }
+
+        .tabs { position: fixed; bottom: 0; left: 0; right: 0; background: #121514; display: flex; border-top: 1px solid #252b28; padding: 8px 0; }
+        .tab { flex: 1; text-align: center; color: var(--muted); font-size: 12px; padding: 6px; cursor: pointer; font-weight: 600; }
+        .tab.active { color: var(--green); }
+        
+        .section { display: none; }
+        .section.active { display: block; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #252b28; }
+        th { color: var(--green); }
+        .list-item { padding: 6px 0; border-bottom: 1px solid #222825; font-size: 13px; }
+        .list-item:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo"><span>X</span> CLUB</div>
+        <div class="badge" id="user-badge">FACE CONTROL: OK</div>
+    </div>
+
+    <!-- ВКЛАДКА 1: ТУРНИР -->
+    <div id="tab-tournament" class="section active">
+        <div class="card">
+            <h2>🏆 Турнир Freezeout</h2>
+            <p>Дисциплина: Техасский Холдем. Вылет без возможности повторного входа (Reentry).</p>
+            <div class="list-item"><b>Взнос:</b> 10 чайных пакетиков</div>
+            <div class="list-item"><b>Стартовый стек:</b> 1 000 у.е. (расчётные знаки X club)</div>
+            <div class="list-item"><b>1 место:</b> 20 пакетиков + V.I.P. до конца смены</div>
+            <div class="list-item"><b>2 место:</b> 15 пакетиков + V.I.P. на 3 дня</div>
+            <div class="list-item"><b>3 место:</b> Возврат взноса (10 пакетиков)</div>
+            <button class="btn" onclick="sendAction('Запись на турнир Freezeout (Взнос 10 пак.)')">Записаться на игру ♠️</button>
+        </div>
+
+        <div class="card">
+            <h2>⏳ Сетка блайндов</h2>
+            <p>От 10 до 6 игроков — рост каждый круг. От 5 игроков — каждые 2 круга.</p>
+            <table>
+                <tr><th>Круги</th><th>Блайнды (SB/BB)</th><th>Режим</th></tr>
+                <tr><td>1 круг</td><td>10 / 20</td><td>Каждый круг</td></tr>
+                <tr><td>2 круг</td><td>15 / 30</td><td>Каждый круг</td></tr>
+                <tr><td>3 круг</td><td>25 / 50</td><td>Каждый круг</td></tr>
+                <tr><td>4 круг</td><td>40 / 80</td><td>Каждый круг</td></tr>
+                <tr><td>5–6 круги</td><td>50 / 100</td><td>Каждые 2 круга</td></tr>
+                <tr><td>7–8 круги</td><td>75 / 150</td><td>Каждые 2 круга</td></tr>
+                <tr><td>9–10 круги</td><td>100 / 200</td><td>Каждые 2 круга</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ВКЛАДКА 2: БАНК И VIP -->
+    <div id="tab-vip" class="section">
+        <div class="card">
+            <h2>👑 Статус V.I.P. клиент</h2>
+            <p>Привилегии: бронь места без очереди, выбор позиции за столом, 1 Time-out (2 мин) за турнир, личный Кат-карт.</p>
+            <div class="list-item"><b>На 3 дня:</b> 10 чайных пакетиков</div>
+            <div class="list-item"><b>До конца смены:</b> 25 чайных пакетиков</div>
+            <button class="btn" onclick="sendAction('Запрос на оформление V.I.P. статуса')">Оформить V.I.P.</button>
+        </div>
+
+        <div class="card">
+            <h2>🏦 X club bank (Турнирный заём)</h2>
+            <p>Нет чая на вход? Оформи целевой кредит под официальную расписку.</p>
+            <div class="list-item"><b>Выдача:</b> 10 пакетиков (сразу в банк турнира)</div>
+            <div class="list-item"><b>Возврат:</b> 12 пакетиков (льготная ставка)</div>
+            <div class="list-item"><b>Просрочка:</b> Санкции по п. 9.3 X club Rules (Бан-лист, штраф 65 пак.)</div>
+            <button class="btn btn-outline" onclick="sendAction('Запрос на Турнирный заём (10 -> 12 пак.)')">Запросить кредит</button>
+        </div>
+    </div>
+
+    <!-- ВКЛАДКА 3: ПРАВИЛА -->
+    <div id="tab-rules" class="section">
+        <div class="card">
+            <h2>📜 Свод правил X club RULES</h2>
+            <div class="list-item"><b>1. Вход:</b> Означает полное согласие с правилами. Действует Face control.</div>
+            <div class="list-item"><b>2. Ответственность:</b> Клуб не отвечает за личные вещи и эмоции участников.</div>
+            <div class="list-item"><b>3. Имущество:</b> За порчу карт, вывесок или банкнот (90х50 мм) — полная компенсация.</div>
+            <div class="list-item"><b>6. Режим работы:</b> Ежедневно с 13:45 до 15:30 (5–8 отрядам вход запрещён).</div>
+            <div class="list-item"><b>7. Рейк:</b> С банка от 5 пакетиков удерживается комиссия 1 пакетик.</div>
+            <div class="list-item"><b>8. Авторское право:</b> За копирование логотипа или «Take и TEA» — бан до конца смены (выкуп 65 пак.).</div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('tournament', this)">🏆 Турнир</div>
+        <div class="tab" onclick="switchTab('vip', this)">👑 VIP и Банк</div>
+        <div class="tab" onclick="switchTab('rules', this)">📜 Правила</div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Разворачиваем на весь экран
+
+        // Подставляем имя игрока из Telegram в шапку
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const user = tg.initDataUnsafe.user;
+            document.getElementById('user-badge').innerText = 'ИГРОК: ' + user.first_name.toUpperCase();
+        }
+
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            el.classList.add('active');
+        }
+
+        function sendAction(actionText) {
+            tg.showAlert('Заявка сформирована: ' + actionText + '.\n\nПодойди к Администрации X club для подтверждения и внесения взноса/подписи расписки!');
+        }
+    </script>
+</body>
+</html>
