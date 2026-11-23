@@ -3,70 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>X club Terminal</title>
+    <title>X CLUB</title>
     <script src="https://telegram.org"></script>
     <style>
         :root {
-            --bg: #0d0f0e;
-            --card: #161a18;
+            --bg: #0b0d0c;
+            --card: #151917;
+            --card-accent: linear-gradient(135deg, #163826 0%, #0d1f16 100%);
             --green: #2ecc71;
-            --green-dark: #27ae60;
-            --text: #f0f4f2;
+            --green-dim: rgba(46, 204, 113, 0.14);
+            --gold: #f1c40f;
+            --red: #e74c3c;
+            --text: #f2f5f3;
             --muted: #8a9992;
+            --border: #222925;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 16px; padding-bottom: 80px; }
-        
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #252b28; padding-bottom: 12px; }
-        .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
-        .logo span { color: var(--green); }
-        .badge { background: rgba(46, 204, 113, 0.15); color: var(--green); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
-
-        .card { background: var(--card); border-radius: 14px; padding: 16px; margin-bottom: 16px; border: 1px solid #222825; }
-        .card h2 { font-size: 18px; margin-bottom: 8px; color: var(--green); }
-        .card p { font-size: 14px; color: var(--muted); line-height: 1.4; margin-bottom: 10px; }
-        
-        .btn { display: block; width: 100%; background: var(--green); color: #000; text-align: center; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 15px; border: none; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-        .btn:active { transform: scale(0.98); background: var(--green-dark); }
-        .btn-outline { background: transparent; border: 1px solid var(--green); color: var(--green); }
-
-        .tabs { position: fixed; bottom: 0; left: 0; right: 0; background: #121514; display: flex; border-top: 1px solid #252b28; padding: 8px 0; }
-        .tab { flex: 1; text-align: center; color: var(--muted); font-size: 12px; padding: 6px; cursor: pointer; font-weight: 600; }
-        .tab.active { color: var(--green); }
-        
+        body { background-color: var(--bg); color: var(--text); padding: 16px; padding-bottom: 88px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+        .logo-wrap { display: flex; align-items: center; gap: 10px; }
+        .logo-sub { font-size: 9px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; display: block; margin-top: -2px; }
+        .logo-title { font-size: 20px; font-weight: 900; letter-spacing: 1px; }
+        .badge { background: var(--green-dim); color: var(--green); padding: 5px 11px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(46, 204, 113, 0.3); }
+        .badge.vip { background: rgba(241, 196, 15, 0.18); color: var(--gold); border-color: rgba(241, 196, 15, 0.45); }
+        .hero-card { background: var(--card-accent); border: 1px solid rgba(46, 204, 113, 0.35); border-radius: 18px; padding: 20px; margin-bottom: 16px; }
+        .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+        .hero-tag { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: var(--green); text-transform: uppercase; }
+        .hero-title { font-size: 24px; font-weight: 900; line-height: 1.1; margin: 6px 0; }
+        .hero-sub { font-size: 13px; color: #b8c7bf; }
+        .hero-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+        .hero-btn { background: var(--text); color: #0b0d0c; padding: 9px 16px; border-radius: 12px; font-size: 13px; font-weight: 800; border: none; cursor: pointer; }
+        .card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 14px; border: 1px solid var(--border); }
+        .card h2 { font-size: 17px; color: var(--text); font-weight: 800; margin-bottom: 8px; }
+        .card h2 span { color: var(--green); }
+        .card p { font-size: 13px; color: var(--muted); line-height: 1.45; margin-bottom: 10px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 12px; margin-top: 10px; text-align: center; }
+        .stat-val { font-size: 20px; font-weight: 900; color: var(--text); }
+        .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+        .banknote-preview { background: linear-gradient(135deg, #1b221e 0%, #0f1311 100%); border: 1.5px dashed var(--green); border-radius: 12px; padding: 14px; margin: 10px 0; font-family: 'Courier New', monospace; }
+        .bn-top { display: flex; justify-content: space-between; font-size: 11px; color: var(--green); font-weight: bold; border-bottom: 1px solid #28332d; padding-bottom: 6px; }
+        .bn-center { text-align: center; padding: 14px 0; }
+        .bn-nominal { font-size: 28px; font-weight: 900; color: var(--text); letter-spacing: 2px; }
+        .bn-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+        .bn-bottom { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); border-top: 1px solid #28332d; padding-top: 6px; }
+        .bn-guard { font-size: 9px; color: var(--green); opacity: 0.8; margin-top: 6px; text-align: center; }
+        details { background: #111513; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+        summary { padding: 14px; font-weight: 700; font-size: 14px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '›'; font-size: 20px; color: var(--green); }
+        details[open] summary::after { transform: rotate(90deg); }
+        .details-body { padding: 10px 14px 14px 14px; font-size: 13px; color: var(--muted); line-height: 1.5; border-top: 1px solid var(--border); }
+        .btn { display: block; width: 100%; background: var(--green); color: #000; text-align: center; padding: 13px; border-radius: 12px; font-weight: 800; font-size: 14px; border: none; cursor: pointer; margin-top: 10px; text-decoration: none; }
+        .btn-gold { background: var(--gold); color: #000; }
+        .btn-red { background: var(--red); color: #fff; }
+        .btn-outline { background: transparent; border: 1px solid #333d38; color: var(--text); }
+        .btn-sm { padding: 7px 9px; font-size: 11px; border-radius: 8px; margin-top: 6px; width: auto; display: inline-block; margin-right: 4px; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #2c3530; background: #0f1210; color: #fff; font-size: 14px; }
+        input:focus { outline: none; border-color: var(--green); }
+        .tabs-wrapper { position: fixed; bottom: 0; left: 0; right: 0; background: #101312; border-top: 1px solid var(--border); z-index: 10; padding: 6px 8px; }
+        .tabs { display: flex; overflow-x: auto; gap: 6px; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab { flex: 0 0 auto; min-width: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); font-size: 10px; padding: 6px 8px; border-radius: 12px; cursor: pointer; font-weight: 700; gap: 3px; }
+        .tab .icon { font-size: 17px; }
+        .tab.active { background: var(--green); color: #0b0d0c; }
         .section { display: none; }
         .section.active { display: block; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #252b28; }
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12px; }
+        th, td { padding: 8px 6px; text-align: left; border-bottom: 1px solid var(--border); }
         th { color: var(--green); }
-        .list-item { padding: 6px 0; border-bottom: 1px solid #222825; font-size: 13px; }
+        .list-item { padding: 8px 0; border-bottom: 1px solid #1d2320; font-size: 13px; line-height: 1.4; }
         .list-item:last-child { border-bottom: none; }
+        .rank-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #1d2320; font-size: 13px; border-radius: 10px; margin-bottom: 4px; }
+        .rank-row.me { background: var(--green-dim); border: 1px solid rgba(46, 204, 113, 0.35); }
+        .rank-num { font-weight: 900; width: 30px; color: var(--muted); }
+        .rank-pts { font-weight: 800; color: var(--green); }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .overlay.show { display: flex; }
+        .modal { background: #161a18; border-radius: 18px; padding: 24px; width: 100%; max-width: 380px; text-align: center; border: 1px solid #2c3530; }
+        .overlay.ban-screen { background: #1a0505; }
+        .ban-screen .modal { background: #240808; border: 2px solid var(--red); box-shadow: 0 0 30px rgba(231, 76, 60, 0.3); }
+        .ban-screen h1 { color: var(--red); font-size: 24px; margin-bottom: 10px; }
+        .vip-screen .modal { background: linear-gradient(145deg, #1c190d, #141816); border: 2px solid var(--gold); box-shadow: 0 0 35px rgba(241, 196, 15, 0.25); }
+        .vip-screen h1 { color: var(--gold); font-size: 22px; margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo"><span>X</span> CLUB</div>
-        <div class="badge" id="user-badge">FACE CONTROL: OK</div>
+    <div id="loader" class="overlay show">
+        <div style="color: var(--green); font-weight: bold;">Загрузка терминала X CLUB...</div>
     </div>
 
-    <!-- ВКЛАДКА 1: ТУРНИР -->
-    <div id="tab-tournament" class="section active">
-        <div class="card">
-            <h2>🏆 Турнир Freezeout</h2>
-            <p>Дисциплина: Техасский Холдем. Вылет без возможности повторного входа (Reentry).</p>
-            <div class="list-item"><b>Взнос:</b> 10 чайных пакетиков</div>
-            <div class="list-item"><b>Стартовый стек:</b> 1 000 у.е. (расчётные знаки X club)</div>
-            <div class="list-item"><b>1 место:</b> 20 пакетиков + V.I.P. до конца смены</div>
-            <div class="list-item"><b>2 место:</b> 15 пакетиков + V.I.P. на 3 дня</div>
-            <div class="list-item"><b>3 место:</b> Возврат взноса (10 пакетиков)</div>
-            <button class="btn" onclick="sendAction('Запись на турнир Freezeout (Взнос 10 пак.)')">Записаться на игру ♠️</button>
+    <div id="reg-overlay" class="overlay">
+        <div class="modal">
+            <h2 style="color: var(--green); margin-bottom: 8px;">Регистрация в X CLUB</h2>
+            <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Заполни карточку участника для прохождения Face control и участия в клубном зачёте.</p>
+            <input type="text" id="reg-name" placeholder="Имя и Фамилия (например: Иван Петров)">
+            <input type="text" id="reg-squad" placeholder="Номер отряда (например: 2 отряд)">
+            <button class="btn" onclick="registerUser()">Создать аккаунт ♠️</button>
+        </div>
+    </div>
+
+    <div id="ban-overlay" class="overlay ban-screen">
+        <div class="modal">
+            <div style="font-size: 48px; margin-bottom: 10px;">⛔</div>
+            <h1>ДОСТУП ЗАКРЫТ</h1>
+            <p style="color: #f5b7b1; font-size: 14px; margin-bottom: 14px;">Вы внесены в официальный <b>Бан-лист X CLUB</b>.</p>
+            <div style="background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; margin-bottom: 16px; font-size: 13px;">
+                <span style="color: var(--muted);">Причина:</span><br>
+                <b id="ban-reason-text" style="color: #fff;">Нарушение правил клуба</b>
+            </div>
+            <p style="font-size: 12px; color: var(--muted);">По вопросам досрочного выхода из бан-листа (п. 8.3 — штраф 65 чайных пакетиков) обратитесь лично к Администрации клуба.</p>
+        </div>
+    </div>
+
+    <div id="vip-overlay" class="overlay vip-screen">
+        <div class="modal">
+            <div style="font-size: 48px; margin-bottom: 8px;">👑</div>
+            <h1>СТАТУС V.I.P. ПРИСВОЕН!</h1>
+            <p style="color: #f9e79f; font-size: 13px; margin-bottom: 14px;">Администрация X CLUB активировала для вас привилегированный доступ.</p>
+            <div style="text-align: left; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; margin-bottom: 16px; font-size: 12px; line-height: 1.5;">
+                • Предварительная бронь места за столом;<br>
+                • Бесплатный вход на закрытые игры (п. 7.2);<br>
+                • Приоритетное обслуживание.
+            </div>
+            <button class="btn btn-gold" onclick="closeVipModal()">Принять привилегии ✨</button>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="logo-wrap">
+            <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://w3.org">
+                <path d="M18 15 C35 42, 62 68, 84 86" stroke="#2ecc71" stroke-width="12" stroke-linecap="round"/>
+                <path d="M82 14 C60 40, 38 65, 16 87" stroke="#f2f5f3" stroke-width="11" stroke-linecap="round"/>
+                <path d="M14 22 L26 12 M74 88 L88 80" stroke="#2ecc71" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            <div>
+                <div class="logo-title">X CLUB</div>
+                <span class="logo-sub">EST. 18.07.2025</span>
+            </div>
+        </div>
+        <div class="badge" id="header-status">ИГРОК</div>
+    </div>
+
+    <div id="tab-home" class="section active">
+        <div class="hero-card">
+            <div class="hero-top">
+                <div>
+                    <div class="hero-tag">ГЛАВНОЕ СОБЫТИЕ</div>
+                    <div class="hero-title">FREEZEOUT<br>TOURNAMENT</div>
+                    <div class="hero-sub">Техасский Холдем • Стек 1 000 у.е.</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 11px; color: var(--muted);">ВЗНОС</div>
+                    <div style="font-size: 18px; font-weight: 900; color: var(--green);">10 пак.</div>
+                </div>
+            </div>
+            <div class="hero-bottom">
+                <div style="font-size: 12px; color: #b8c7bf;">⏰ Ежедневно 13:45 – 15:30</div>
+                <button class="hero-btn" onclick="switchTab('tournament', document.getElementById('nav-tourn'))">Регламент ›</button>
+            </div>
         </div>
 
         <div class="card">
-            <h2>⏳ Сетка блайндов</h2>
-            <p>От 10 до 6 игроков — рост каждый круг. От 5 игроков — каждые 2 круга.</p>
+            <h2>Рейтинг растёт с <span>историей</span></h2>
+            <p>Твоя текущая позиция в клубном зачёте среди всех участников смены:</p>
+            <div class="stat-grid">
+                <div>
+                    <div class="stat-val" id="home-rank" style="color: var(--green);">—</div>
+                    <div class="stat-lbl">Место</div>
+                </div>
+                <div>
+                    <div class="stat-val" id="home-rating">0</div>
+                    <div class="stat-lbl">Очков</div>
+                </div>
+                <div>
+                    <div class="stat-val" id="home-status-short" style="font-size: 14px; padding-top: 4px;">ИГРОК</div>
+                    <div class="stat-lbl">Статус</div>
+                </div>
+            </div>
+            <button class="btn btn-outline" onclick="switchTab('rating', document.getElementById('nav-rating'))">Смотреть таблицу лидеров →</button>
+        </div>
+
+        <div class="card">
+            <h2>📂 Быстрый доступ</h2>
+            <div class="list-item" style="cursor:pointer; display:flex; justify-content:space-between;" onclick="switchTab('org', document.getElementById('nav-org'))">
+                <span>💵 Образцы расчётных знаков и файлы</span><span style="color:var(--green);">›</span>
+            </div>
+            <div class="list-item" style="cursor:pointer; display:flex; justify-content:space-between;" onclick="switchTab('rules', document.getElementById('nav-rules'))">
+                <span>📜 Действующий устав X club RULES</span><span style="color:var(--green);">›</span>
+            </div>
+        </div>
+    </div>
+    <div id="tab-tournament" class="section">
+        <div class="card">
+            <h2>🏆 Турнир <span>Freezeout</span></h2>
+            <p>Игра на выбывание без возможности повторного входа (Reentry). Используются исключительно оригинальные расчётные знаки X club.</p>
+            <div class="list-item"><b>Взнос:</b> 10 чайных пакетиков (или целевой заём по п. 4)</div>
+            <div class="list-item"><b>Стартовый стек:</b> 1 000 у.е. (5×10, 3×50, 3×100, 1×500)</div>
+            <div class="list-item"><b>🥇 1 место:</b> 20 пакетиков + V.I.P. до конца смены</div>
+            <div class="list-item"><b>🥈 2 место:</b> 15 пакетиков + V.I.P. на 3 дня</div>
+            <div class="list-item"><b>🥉 3 место:</b> Возврат взноса (10 пакетиков)</div>
+        </div>
+
+        <div class="card">
+            <h2>⏳ Сетка <span>блайндов</span></h2>
+            <p>От 10 до 6 игроков — повышение каждый круг. От 5 игроков и меньше — каждые 2 круга.</p>
             <table>
                 <tr><th>Круги</th><th>Блайнды (SB/BB)</th><th>Режим</th></tr>
                 <tr><td>1 круг</td><td>10 / 20</td><td>Каждый круг</td></tr>
@@ -76,69 +217,325 @@
                 <tr><td>5–6 круги</td><td>50 / 100</td><td>Каждые 2 круга</td></tr>
                 <tr><td>7–8 круги</td><td>75 / 150</td><td>Каждые 2 круга</td></tr>
                 <tr><td>9–10 круги</td><td>100 / 200</td><td>Каждые 2 круга</td></tr>
+                <tr><td>11–12 круги</td><td>200 / 400</td><td>Каждые 2 круга</td></tr>
             </table>
         </div>
     </div>
 
-    <!-- ВКЛАДКА 2: БАНК И VIP -->
-    <div id="tab-vip" class="section">
+    <div id="tab-rating" class="section">
         <div class="card">
-            <h2>👑 Статус V.I.P. клиент</h2>
-            <p>Привилегии: бронь места без очереди, выбор позиции за столом, 1 Time-out (2 мин) за турнир, личный Кат-карт.</p>
-            <div class="list-item"><b>На 3 дня:</b> 10 чайных пакетиков</div>
-            <div class="list-item"><b>До конца смены:</b> 25 чайных пакетиков</div>
-            <button class="btn" onclick="sendAction('Запрос на оформление V.I.P. статуса')">Оформить V.I.P.</button>
-        </div>
-
-        <div class="card">
-            <h2>🏦 X club bank (Турнирный заём)</h2>
-            <p>Нет чая на вход? Оформи целевой кредит под официальную расписку.</p>
-            <div class="list-item"><b>Выдача:</b> 10 пакетиков (сразу в банк турнира)</div>
-            <div class="list-item"><b>Возврат:</b> 12 пакетиков (льготная ставка)</div>
-            <div class="list-item"><b>Просрочка:</b> Санкции по п. 9.3 X club Rules (Бан-лист, штраф 65 пак.)</div>
-            <button class="btn btn-outline" onclick="sendAction('Запрос на Турнирный заём (10 -> 12 пак.)')">Запросить кредит</button>
+            <h2>📊 Клубный <span>зачёт</span></h2>
+            <p>Позиция среди активных участников X CLUB:</p>
+            <div class="stat-grid" style="margin-bottom: 14px;">
+                <div>
+                    <div class="stat-val" id="rat-rank" style="color: var(--green);">—</div>
+                    <div class="stat-lbl">Ваше место</div>
+                </div>
+                <div>
+                    <div class="stat-val" id="rat-pts">0</div>
+                    <div class="stat-lbl">Рейтинг</div>
+                </div>
+                <div>
+                    <div class="stat-val" id="rat-total">0</div>
+                    <div class="stat-lbl">Участников</div>
+                </div>
+            </div>
+            <div id="rating-list">Загрузка рейтинга...</div>
         </div>
     </div>
 
-    <!-- ВКЛАДКА 3: ПРАВИЛА -->
+    <div id="tab-org" class="section">
+        <div class="card">
+            <h2>📂 Организационные <span>моменты</span></h2>
+            <p>Официальные образцы расчётных знаков, бланки и нормативные документы клуба.</p>
+
+            <details open>
+                <summary>💵 Образцы купюр X Club Rus (90×50 мм)</summary>
+                <div class="details-body">
+                    <p style="font-size: 12px; margin-bottom: 8px;">К игре допускаются только оригинальные расчётные знаки установленного образца с фирменным логотипом и штампом Администрации. Доступные номиналы: <b>10, 50, 100, 500 у.е.</b></p>
+                    <div class="banknote-preview">
+                        <div class="bn-top"><span>X CLUB BANK</span><span>СЕРИЯ: X-RUS</span></div>
+                        <div class="bn-center">
+                            <div class="bn-nominal">100 У.Е.</div>
+                            <div class="bn-sub">РАСЧЁТНЫЙ ЗНАК КЛУБА</div>
+                        </div>
+                        <div class="bn-bottom"><span>РАЗМЕР: 90×50 ММ</span><span>🔒 ОРИГИНАЛ</span></div>
+                        <div class="bn-guard">ЗАЩИЩЕНО УСТАВОМ X CLUB • ПОДДЕЛКА КАРАЕТСЯ БАНОМ</div>
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>🏦 X club bank (Бланк целевого займа)</summary>
+                <div class="details-body">
+                    <b>Условия кредитования на вход (п. 4 Регламента):</b><br>
+                    • Сумма выдачи: <b>10 чайных пакетиков</b> (сразу идут в банк турнира).<br>
+                    • Сумма возврата: <b>12 чайных пакетиков</b> в установленный распиской срок.<br>
+                    • Оформляется исключительно при подписании бумажного бланка долговой расписки.<br>
+                    • Просрочка регулируется Положением 9.3 X club Rules.
+                </div>
+            </details>
+
+            <details>
+                <summary>💼 Штатное расписание (X club Work)</summary>
+                <div class="details-body">
+                    Официальное трудоустройство по контракту сотрудника (Раздел 10):<br>
+                    • <b>Dealer</b> (Дилер / Крупье)<br>
+                    • <b>Face control</b> (Служба контроля доступа)<br>
+                    • <b>Маркетолог</b><br>
+                    • <b>Дизайнер</b><br>
+                    • <b>Special worker</b> (Специальный сотрудник)
+                </div>
+            </details>
+        </div>
+    </div>
+
     <div id="tab-rules" class="section">
         <div class="card">
-            <h2>📜 Свод правил X club RULES</h2>
-            <div class="list-item"><b>1. Вход:</b> Означает полное согласие с правилами. Действует Face control.</div>
-            <div class="list-item"><b>2. Ответственность:</b> Клуб не отвечает за личные вещи и эмоции участников.</div>
-            <div class="list-item"><b>3. Имущество:</b> За порчу карт, вывесок или банкнот (90х50 мм) — полная компенсация.</div>
-            <div class="list-item"><b>6. Режим работы:</b> Ежедневно с 13:45 до 15:30 (5–8 отрядам вход запрещён).</div>
-            <div class="list-item"><b>7. Рейк:</b> С банка от 5 пакетиков удерживается комиссия 1 пакетик.</div>
-            <div class="list-item"><b>8. Авторское право:</b> За копирование логотипа или «Take и TEA» — бан до конца смены (выкуп 65 пак.).</div>
+            <h2>📜 Свод законов <span>X club RULES</span></h2>
+            <div class="list-item"><b>1. Правила входа:</b> Вход означает безусловное согласие с правилами. Действует система Face control.</div>
+            <div class="list-item"><b>2. Ответственность:</b> Администрация не несёт ответственности за поведение, эмоции и личные вещи участников.</div>
+            <div class="list-item"><b>3. Имущество:</b> За порчу/утрату инвентаря, карт, вывесок и расчётных знаков (90×50 мм) — полная компенсация.</div>
+            <div class="list-item"><b>4. V.I.P. клиенты:</b> Стоимость: 10 пак. (3 дня) / 25 пак. (долгосрочный). На 5–8 (9) отряды не распространяется.</div>
+            <div class="list-item"><b>5. Проведение игры:</b> Техасский Холдем (джокеры и блайнды — на усмотрение Администрации).</div>
+            <div class="list-item"><b>6. Режим работы:</b> Ежедневно с 13:45 до 15:30. 5–8 (9) отрядам вход запрещён. Основан 18.07.2025.</div>
+            <div class="list-item"><b>7. Комиссия:</b> Вход в игру — 1 пакетик (для V.I.P. бесплатно). С банка от 5 пакетиков рейк — 1 пакетик.</div>
+            <div class="list-item"><b>8. Авторское право:</b> За использование знаков «$*», логотипа X club или «Take и TEA» — бан до конца смены (выкуп из бан-листа — штраф 65 пакетиков).</div>
+            <div class="list-item"><b>9. X club bank:</b> Займы до 3 дней под залог или процент.</div>
+            <div class="list-item"><b>12. Лицензирование:</b> Право на использование символики клуба — 100 пакетиков с оформлением лицензии.</div>
         </div>
     </div>
 
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab('tournament', this)">🏆 Турнир</div>
-        <div class="tab" onclick="switchTab('vip', this)">👑 VIP и Банк</div>
-        <div class="tab" onclick="switchTab('rules', this)">📜 Правила</div>
+    <div id="tab-profile" class="section">
+        <div class="card">
+            <h2>🪪 Личные <span>данные</span></h2>
+            <div class="list-item"><b>Игрок:</b> <span id="prof-name">—</span></div>
+            <div class="list-item"><b>Отряд:</b> <span id="prof-squad">—</span></div>
+            <div class="list-item"><b>Статус:</b> <span id="prof-status">ИГРОК</span></div>
+            <div class="list-item" id="prof-role-wrap" style="display:none;"><b>Должность (X club Work):</b> <span id="prof-role" style="color: var(--green); font-weight: bold;"></span></div>
+            <div class="list-item"><b>Telegram ID:</b> <span id="prof-id" style="color: var(--muted);">—</span></div>
+        </div>
+
+        <details>
+            <summary>👑 Мои привилегии (Раздел 4)</summary>
+            <div class="details-body" id="prof-privileges">
+                Базовый доступ участника. Для получения расширенных привилегий (бронь места, бесплатный вход на закрытые игры, приоритетное обслуживание) требуется статус <b>V.I.P. клиент</b>.
+            </div>
+        </details>
+
+        <div class="card">
+            <h2>📡 Официальный канал</h2>
+            <p>Единственный официальный информационный ресурс клуба в Telegram (Раздел 13):</p>
+            <a href="https://t.me" target="_blank" class="btn btn-outline">Перейти в канал X club ↗</a>
+        </div>
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем на весь экран
+    <div id="tab-admin" class="section">
+        <div class="card">
+            <h2>🛡️ Панель <span>Владельца</span></h2>
+            <p>Управление статусами, рейтингом, должностями и бан-листом в пару кликов:</p>
+            <div id="admin-players-list">Загрузка списка...</div>
+        </div>
+    </div>
 
-        // Подставляем имя игрока из Telegram в шапку
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const user = tg.initDataUnsafe.user;
-            document.getElementById('user-badge').innerText = 'ИГРОК: ' + user.first_name.toUpperCase();
+    <div class="tabs-wrapper">
+        <div class="tabs">
+            <div class="tab active" id="nav-home" onclick="switchTab('home', this)"><span class="icon">🏠</span>Главная</div>
+            <div class="tab" id="nav-tourn" onclick="switchTab('tournament', this)"><span class="icon">🏆</span>Турнир</div>
+            <div class="tab" id="nav-rating" onclick="switchTab('rating', this)"><span class="icon">📊</span>Рейтинг</div>
+            <div class="tab" id="nav-org" onclick="switchTab('org', this)"><span class="icon">📂</span>Орг. моменты</div>
+            <div class="tab" id="nav-rules" onclick="switchTab('rules', this)"><span class="icon">📜</span>Правила</div>
+            <div class="tab" id="nav-profile" onclick="switchTab('profile', this)"><span class="icon">🪪</span>Профиль</div>
+            <div class="tab" id="nav-admin" style="display:none; color: var(--gold);" onclick="switchTab('admin', this)"><span class="icon">🛡️</span>Админ</div>
+        </div>
+    </div>
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhDf6uTpQd91antrvrscaUmHlR9zZ5zJl2-vmZyIbJL563Y62bR2TAkiMXPRVpDa8VWw/exec";
+        
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const user = (tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : { id: "5867953216", first_name: "Админ" };
+        const currentTgId = String(user.id);
+
+        async function loadData() {
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=get&tg_id=${currentTgId}`);
+                const data = await res.json();
+                document.getElementById('loader').classList.remove('show');
+
+                if (!data.found) {
+                    document.getElementById('reg-overlay').classList.add('show');
+                    return;
+                }
+
+                if (data.ban === "ДА") {
+                    document.getElementById('ban-reason-text').innerText = data.ban_reason || "Нарушение правил X club";
+                    document.getElementById('ban-overlay').classList.add('show');
+                    return;
+                }
+
+                const rankText = data.rank !== "—" ? `#${data.rank}` : "—";
+                document.getElementById('home-rank').innerText = rankText;
+                document.getElementById('home-rating').innerText = data.rating;
+                document.getElementById('home-status-short').innerText = data.status;
+
+                document.getElementById('rat-rank').innerText = rankText;
+                document.getElementById('rat-pts').innerText = data.rating;
+                document.getElementById('rat-total').innerText = data.leaderboard ? data.leaderboard.length : 0;
+
+                document.getElementById('prof-name').innerText = data.name;
+                document.getElementById('prof-squad').innerText = data.squad;
+                document.getElementById('prof-status').innerText = data.status;
+                document.getElementById('prof-id').innerText = currentTgId;
+
+                if (data.role) {
+                    document.getElementById('prof-role-wrap').style.display = 'block';
+                    document.getElementById('prof-role').innerText = data.role;
+                }
+
+                const headerBadge = document.getElementById('header-status');
+                if (data.status === "VIP") {
+                    headerBadge.innerText = "V.I.P.";
+                    headerBadge.classList.add('vip');
+                    document.getElementById('prof-privileges').innerHTML = `
+                        <b style="color:var(--gold);">Активен статус V.I.P. клиент:</b><br>
+                        • Предварительное бронирование места за столом до начала игры;<br>
+                        • Бесплатный вход на закрытые и специальные мероприятия (п. 7.2);<br>
+                        • Приоритетное (внеочередное) обслуживание.
+                    `;
+                    if (!localStorage.getItem('vip_seen_' + currentTgId)) {
+                        document.getElementById('vip-overlay').classList.add('show');
+                    }
+                } else {
+                    headerBadge.innerText = data.role ? data.role : "ИГРОК";
+                    headerBadge.classList.remove('vip');
+                    localStorage.removeItem('vip_seen_' + currentTgId);
+                }
+
+                renderLeaderboard(data.leaderboard);
+
+                if (data.isAdmin) {
+                    document.getElementById('nav-admin').style.display = 'flex';
+                    renderAdminList(data.allPlayers);
+                }
+            } catch (e) {
+                document.getElementById('loader').innerText = "Ошибка связи с сервером. Проверь SCRIPT_URL.";
+            }
+        }
+
+        function renderLeaderboard(list) {
+            const container = document.getElementById('rating-list');
+            if (!list || list.length === 0) {
+                container.innerHTML = "<p>Пока нет участников в рейтинге.</p>";
+                return;
+            }
+            container.innerHTML = "";
+            list.forEach((p, idx) => {
+                const pos = idx + 1;
+                let medal = `#${pos}`;
+                if (pos === 1) medal = "🥇";
+                if (pos === 2) medal = "🥈";
+                if (pos === 3) medal = "🥉";
+
+                const isMe = p.tg_id === currentTgId;
+                const vipBadge = p.status === "VIP" ? `<span style="color:var(--gold); font-size:10px; font-weight:bold;">[VIP]</span>` : "";
+
+                container.innerHTML += `
+                    <div class="rank-row ${isMe ? 'me' : ''}">
+                        <div style="display:flex; align-items:center;">
+                            <span class="rank-num">${medal}</span>
+                            <div>
+                                <b>${p.name}</b> ${vipBadge}<br>
+                                <span style="font-size:11px; color:var(--muted);">${p.squad}</span>
+                            </div>
+                        </div>
+                        <div class="rank-pts">${p.rating} очк.</div>
+                    </div>
+                `;
+            });
+        }
+
+        function closeVipModal() {
+            localStorage.setItem('vip_seen_' + currentTgId, 'true');
+            document.getElementById('vip-overlay').classList.remove('show');
+        }
+
+        async function registerUser() {
+            const name = document.getElementById('reg-name').value.trim();
+            const squad = document.getElementById('reg-squad').value.trim();
+            if (!name || !squad) return tg.showAlert("Заполни Имя и Отряд!");
+
+            document.getElementById('reg-overlay').classList.remove('show');
+            document.getElementById('loader').classList.add('show');
+
+            await fetch(`${SCRIPT_URL}?action=register&tg_id=${currentTgId}&name=${encodeURIComponent(name)}&squad=${encodeURIComponent(squad)}`);
+            loadData();
+        }
+
+        function renderAdminList(players) {
+            const container = document.getElementById('admin-players-list');
+            container.innerHTML = "";
+            players.forEach(p => {
+                const isVip = p.status === "VIP";
+                const isBanned = p.ban === "ДА";
+                container.innerHTML += `
+                    <div class="list-item" style="padding: 12px 0;">
+                        <div>
+                            <b>${p.name}</b> (${p.squad}) — <span style="color:${isVip ? 'var(--gold)' : 'var(--green)'}">${p.status}</span> 
+                            | Рейтинг: <b>${p.rating}</b>
+                            ${p.role ? `[${p.role}]` : ''} 
+                            ${isBanned ? '<b style="color:var(--red)">[БАН]</b>' : ''}
+                        </div>
+                        <div>
+                            <button class="btn btn-gold btn-sm" onclick="adminUpdate('${p.tg_id}', 'vip', '${isVip ? 'ИГРОК' : 'VIP'}')">${isVip ? 'Снять VIP' : 'Дать VIP'}</button>
+                            <button class="btn btn-outline btn-sm" onclick="adminRating('${p.tg_id}', ${p.rating})">Рейтинг</button>
+                            <button class="btn btn-outline btn-sm" onclick="adminRole('${p.tg_id}')">Должность</button>
+                            <button class="btn btn-red btn-sm" onclick="adminBan('${p.tg_id}', ${isBanned})">${isBanned ? 'Разбанить' : 'В Бан'}</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function adminUpdate(targetId, field, val, reason = "") {
+            document.getElementById('loader').classList.add('show');
+            await fetch(`${SCRIPT_URL}?action=admin_update&tg_id=${currentTgId}&target_id=${targetId}&field=${field}&val=${encodeURIComponent(val)}&reason=${encodeURIComponent(reason)}`);
+            loadData();
+        }
+
+        function adminRating(targetId, currentRating) {
+            const newRating = prompt("Введи новое количество очков рейтинга для игрока:", currentRating);
+            if (newRating !== null && !isNaN(Number(newRating))) {
+                adminUpdate(targetId, 'rating', Number(newRating));
+            }
+        }
+
+        function adminBan(targetId, isBanned) {
+            if (isBanned) {
+                adminUpdate(targetId, 'ban', 'НЕТ', '');
+            } else {
+                const reason = prompt("Укажи причину бана (например: Нарушение п. 8.2):", "Нарушение правил X club");
+                if (reason !== null) adminUpdate(targetId, 'ban', 'ДА', reason);
+            }
+        }
+
+        function adminRole(targetId) {
+            const role = prompt("Впиши должность (Dealer, Face control, Маркетолог, Дизайнер, Special worker) или оставь пустым чтобы убрать:", "");
+            if (role !== null) adminUpdate(targetId, 'role', role.trim());
         }
 
         function switchTab(tabId, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
-            el.classList.add('active');
+            if (el) {
+                el.classList.add('active');
+                el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
         }
 
-        function sendAction(actionText) {
-            tg.showAlert('Заявка сформирована: ' + actionText + '.\n\nПодойди к Администрации X club для подтверждения и внесения взноса/подписи расписки!');
-        }
+        loadData();
     </script>
 </body>
 </html>
