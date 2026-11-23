@@ -89,7 +89,7 @@
 </head>
 <body>
 
-    <div id="loader" class="overlay show">
+    <div id="loader" class="overlay">
         <div style="color: var(--green); font-weight: bold;">Загрузка терминала X CLUB...</div>
     </div>
 
@@ -358,11 +358,13 @@
         const user = (tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : { id: "5867953216", first_name: "Админ" };
         const currentTgId = String(user.id);
 
-        async function loadData() {
+                async function loadData() {
             try {
-                const res = await fetch(`${SCRIPT_URL}?action=get&tg_id=${currentTgId}`);
+                const res = await fetch(`${SCRIPT_URL}?action=get&tg_id=${currentTgId}`, {
+                    method: "GET",
+                    redirect: "follow"
+                });
                 const data = await res.json();
-                document.getElementById('loader').classList.remove('show');
 
                 if (!data.found) {
                     document.getElementById('reg-overlay').classList.add('show');
@@ -420,9 +422,10 @@
                     renderAdminList(data.allPlayers);
                 }
             } catch (e) {
-                document.getElementById('loader').innerText = "Ошибка связи с сервером. Проверь SCRIPT_URL.";
+                alert("Ошибка связи с таблицей: " + e.message);
             }
         }
+
 
         function renderLeaderboard(list) {
             const container = document.getElementById('rating-list');
