@@ -352,8 +352,13 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMphAD9srGIetdrrT-5fuhH4-vysI1mTozFZAYfBm501OnqUy2181oU9lXVvko2BBzkQ/exec";
         
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+        const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : {
+    expand: () => {},
+    showAlert: (msg) => alert(msg),
+    initDataUnsafe: {}
+};
+tg.expand();
+
 
         const user = (tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : { id: "5867953216", first_name: "Админ" };
         const currentTgId = String(user.id);
