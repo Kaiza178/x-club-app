@@ -7,401 +7,350 @@
     <script src="https://telegram.org"></script>
     <style>
         :root {
-            --bg: #0b0d0c;
-            --card: #151917;
-            --card-accent: linear-gradient(135deg, #163826 0%, #0d1f16 100%);
-            --green: #2ecc71;
-            --green-dim: rgba(46, 204, 113, 0.14);
-            --gold: #f1c40f;
-            --red: #e74c3c;
-            --text: #f2f5f3;
-            --muted: #8a9992;
-            --border: #222925;
+            --bg: #0b0d10;
+            --card: #15191f;
+            --card-light: #1e242c;
+            --green: #00d26a;
+            --gold: #f5b942;
+            --red: #ff3b30;
+            --text: #ffffff;
+            --muted: #8b949e;
+            --border: rgba(255, 255, 255, 0.08);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 16px; padding-bottom: 88px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-        .logo-wrap { display: flex; align-items: center; gap: 10px; }
-        .logo-sub { font-size: 9px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; display: block; margin-top: -2px; }
-        .logo-title { font-size: 20px; font-weight: 900; letter-spacing: 1px; }
-        .badge { background: var(--green-dim); color: var(--green); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(46, 204, 113, 0.35); cursor: pointer; }
-        .badge.vip { background: rgba(241, 196, 15, 0.18); color: var(--gold); border-color: rgba(241, 196, 15, 0.5); }
-        .badge.owner { background: linear-gradient(135deg, rgba(241,196,15,0.28), rgba(46,204,113,0.22)); color: #fff; border-color: var(--gold); }
-        .hero-card { background: var(--card-accent); border: 1px solid rgba(46, 204, 113, 0.35); border-radius: 18px; padding: 20px; margin-bottom: 16px; }
-        .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
-        .hero-tag { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: var(--green); text-transform: uppercase; }
-        .hero-title { font-size: 22px; font-weight: 900; line-height: 1.15; margin: 6px 0; }
-        .hero-sub { font-size: 13px; color: #b8c7bf; }
-        .hero-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08); }
-        .hero-btn { background: var(--text); color: #0b0d0c; padding: 9px 16px; border-radius: 12px; font-size: 13px; font-weight: 800; border: none; cursor: pointer; }
-        .card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 14px; border: 1px solid var(--border); }
-        .card h2 { font-size: 17px; color: var(--text); font-weight: 800; margin-bottom: 8px; }
-        .card h2 span { color: var(--green); }
-        .card p { font-size: 13px; color: var(--muted); line-height: 1.45; margin-bottom: 10px; }
-        .info-box { background: rgba(46, 204, 113, 0.08); border: 1px solid rgba(46, 204, 113, 0.25); border-radius: 12px; padding: 12px; font-size: 12px; color: #cde3d7; line-height: 1.45; margin-bottom: 12px; }
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 12px; margin-top: 10px; text-align: center; }
-        .stat-val { font-size: 20px; font-weight: 900; color: var(--text); }
-        .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
-        .sub-tabs { display: flex; gap: 6px; margin-bottom: 12px; background: #0f1210; padding: 4px; border-radius: 12px; border: 1px solid var(--border); }
-        .sub-tab { flex: 1; text-align: center; padding: 8px 6px; font-size: 12px; font-weight: 700; color: var(--muted); border-radius: 9px; cursor: pointer; }
-        .sub-tab.active { background: var(--green); color: #0b0d0c; }
-        .tourn-item { background: #101412; border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 10px; cursor: pointer; }
-        .tourn-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .tourn-title { font-size: 15px; font-weight: 800; color: var(--text); }
-        .tourn-pill { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 8px; background: var(--green-dim); color: var(--green); }
-        .banknote-preview { background: linear-gradient(135deg, #1b221e 0%, #0f1311 100%); border: 1.5px dashed var(--green); border-radius: 12px; padding: 14px; margin: 10px 0; font-family: 'Courier New', monospace; }
-        .bn-top { display: flex; justify-content: space-between; font-size: 11px; color: var(--green); font-weight: bold; border-bottom: 1px solid #28332d; padding-bottom: 6px; }
-        .bn-center { text-align: center; padding: 14px 0; }
-        .bn-nominal { font-size: 28px; font-weight: 900; color: var(--text); letter-spacing: 2px; }
-        .bn-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-        .bn-bottom { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); border-top: 1px solid #28332d; padding-top: 6px; }
-        .bn-guard { font-size: 9px; color: var(--green); opacity: 0.8; margin-top: 6px; text-align: center; }
-        details { background: #111513; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
-        summary { padding: 14px; font-weight: 700; font-size: 14px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
-        summary::-webkit-details-marker { display: none; }
-        summary::after { content: '›'; font-size: 20px; color: var(--green); }
-        details[open] summary::after { transform: rotate(90deg); }
-        .details-body { padding: 10px 14px 14px 14px; font-size: 13px; color: var(--muted); line-height: 1.5; border-top: 1px solid var(--border); }
-        .btn { display: block; width: 100%; background: var(--green); color: #000; text-align: center; padding: 12px; border-radius: 12px; font-weight: 800; font-size: 14px; border: none; cursor: pointer; margin-top: 10px; text-decoration: none; }
+        body { background-color: var(--bg); color: var(--text); padding: 16px; padding-bottom: 92px; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .logo-box { display: flex; align-items: center; gap: 10px; }
+        .logo-img { width: 38px; height: 38px; border-radius: 8px; object-fit: cover; border: 1px solid var(--gold); }
+        .logo-text { font-size: 22px; font-weight: 900; letter-spacing: 2px; }
+        .logo-text span { color: var(--green); }
+        
+        .badge { background: rgba(0, 210, 106, 0.15); color: var(--green); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; border: 1px solid rgba(0, 210, 106, 0.3); cursor: pointer; text-transform: uppercase; }
+        .badge.vip { background: rgba(245, 185, 66, 0.15); color: var(--gold); border-color: rgba(245, 185, 66, 0.4); }
+        .badge.owner { background: linear-gradient(135deg, rgba(245, 185, 66, 0.25), rgba(255, 149, 0, 0.25)); color: var(--gold); border-color: var(--gold); box-shadow: 0 0 12px rgba(245, 185, 66, 0.25); }
+        
+        .card { background: var(--card); border-radius: 16px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--border); }
+        .card-gold { border-color: rgba(245, 185, 66, 0.4); background: linear-gradient(180deg, rgba(245, 185, 66, 0.08) 0%, var(--card) 100%); }
+        .card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+        .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 6px; text-align: center; }
+        .stat-val { font-size: 18px; font-weight: 800; color: var(--green); }
+        .stat-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
+        
+        p { font-size: 14px; line-height: 1.5; color: #d0d7de; margin-bottom: 10px; }
+        .list-item { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: #d0d7de; }
+        .list-item:last-child { border-bottom: none; }
+        
+        .btn { display: block; width: 100%; background: var(--green); color: #000; text-align: center; padding: 13px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 14px; margin-top: 10px; border: none; cursor: pointer; }
         .btn-gold { background: var(--gold); color: #000; }
         .btn-red { background: var(--red); color: #fff; }
-        .btn-outline { background: transparent; border: 1px solid #333d38; color: var(--text); }
-        .btn-sm { padding: 7px 9px; font-size: 11px; border-radius: 8px; margin-top: 6px; width: auto; display: inline-block; margin-right: 4px; }
-        input, textarea { width: 100%; padding: 11px; margin-bottom: 8px; border-radius: 10px; border: 1px solid #2c3530; background: #0f1210; color: #fff; font-size: 13px; }
-        input:focus, textarea:focus { outline: none; border-color: var(--green); }
-        .tabs-wrapper { position: fixed; bottom: 0; left: 0; right: 0; background: #101312; border-top: 1px solid var(--border); z-index: 10; padding: 6px 8px; }
-        .tabs { display: flex; overflow-x: auto; gap: 6px; scrollbar-width: none; }
-        .tabs::-webkit-scrollbar { display: none; }
-        .tab { flex: 0 0 auto; min-width: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); font-size: 10px; padding: 6px 8px; border-radius: 12px; cursor: pointer; font-weight: 700; gap: 3px; }
-        .tab .icon { font-size: 17px; }
-        .tab.active { background: var(--green); color: #0b0d0c; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-sm { padding: 7px 11px; font-size: 12px; display: inline-block; width: auto; margin-top: 6px; margin-right: 4px; }
+        
+        .sub-tabs { display: flex; gap: 6px; margin-bottom: 14px; background: var(--card-light); padding: 4px; border-radius: 10px; }
+        .sub-tab { flex: 1; text-align: center; padding: 8px; font-size: 12px; font-weight: 700; border-radius: 8px; color: var(--muted); cursor: pointer; }
+        .sub-tab.active { background: var(--card); color: var(--green); }
+        
+        .input { width: 100%; background: var(--card-light); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 10px; font-size: 14px; margin-bottom: 10px; outline: none; }
+        textarea.input { resize: vertical; min-height: 75px; }
+        
         .section { display: none; }
         .section.active { display: block; }
-        .list-item { padding: 8px 0; border-bottom: 1px solid #1d2320; font-size: 13px; line-height: 1.4; }
-        .list-item:last-child { border-bottom: none; }
-        .rank-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #1d2320; font-size: 13px; border-radius: 10px; margin-bottom: 4px; }
-        .rank-row.me { background: var(--green-dim); border: 1px solid rgba(46, 204, 113, 0.35); }
-        .rank-num { font-weight: 900; width: 30px; color: var(--muted); }
-        .rank-pts { font-weight: 800; color: var(--green); }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
+        
+        .tabs-wrapper { position: fixed; bottom: 0; left: 0; right: 0; background: #111418; border-top: 1px solid var(--border); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; z-index: 100; }
+        .tabs-wrapper::-webkit-scrollbar { display: none; }
+        .tabs { display: inline-flex; min-width: 100%; padding: 8px 6px; }
+        .tab { flex: 1; min-width: 74px; text-align: center; color: var(--muted); font-size: 10px; font-weight: 600; cursor: pointer; padding: 4px 2px; }
+        .tab.active { color: var(--green); }
+        .tab span.icon { display: block; font-size: 18px; margin-bottom: 3px; }
+        
+        .overlay { position: fixed; inset: 0; background: rgba(11, 13, 16, 0.96); z-index: 999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
         .overlay.show { display: flex; }
-        .modal { background: #161a18; border-radius: 18px; padding: 20px; width: 100%; max-width: 400px; text-align: center; border: 1px solid #2c3530; max-height: 90vh; overflow-y: auto; }
-        .overlay.ban-screen { background: #1a0505; }
-        .ban-screen .modal { background: #240808; border: 2px solid var(--red); box-shadow: 0 0 30px rgba(231, 76, 60, 0.3); }
-        .ban-screen h1 { color: var(--red); font-size: 24px; margin-bottom: 10px; }
-        .vip-screen .modal { background: linear-gradient(145deg, #1c190d, #141816); border: 2px solid var(--gold); box-shadow: 0 0 35px rgba(241, 196, 15, 0.25); }
-        .vip-screen h1 { color: var(--gold); font-size: 22px; margin-bottom: 8px; }
+        .modal-box { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px; width: 100%; max-width: 420px; max-height: 88vh; overflow-y: auto; }
+        .ban-screen { background: #1a0808; border: 2px solid var(--red); text-align: center; }
+        .vip-screen { border: 2px solid var(--gold); text-align: center; }
+        
+        .rank-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--card-light); border-radius: 10px; margin-bottom: 8px; }
+        .rank-row.me { border: 1px solid var(--green); }
+        .rank-num { font-weight: 800; width: 28px; color: var(--gold); }
+        .rank-pts { font-weight: 800; color: var(--green); }
     </style>
 </head>
 <body>
 
     <div id="loader" class="overlay">
-        <div style="color: var(--green); font-weight: bold;">Синхронизация X CLUB...</div>
+        <div style="font-size: 32px; margin-bottom: 12px;">♠️</div>
+        <div style="font-weight: 700; color: var(--green);">Синхронизация терминала X CLUB...</div>
     </div>
 
-    <div id="notg-overlay" class="overlay">
-        <div class="modal">
-            <div style="font-size: 42px; margin-bottom: 10px;">📲</div>
-            <h2 style="color: var(--green); margin-bottom: 8px;">Откройте в Telegram</h2>
-            <p style="font-size: 13px; color: var(--muted);">Терминал X CLUB работает только внутри официального Telegram-бота для защиты от дубликатов аккаунтов.</p>
+    <div id="not-tg-overlay" class="overlay">
+        <div class="modal-box" style="text-align: center;">
+            <div style="font-size: 42px; margin-bottom: 12px;">🔒</div>
+            <div style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Доступ только через Telegram</div>
+            <p style="font-size: 13px; color: var(--muted);">Открой это приложение через официального бота X CLUB в Telegram, чтобы система привязала твой личный аккаунт без дубликатов.</p>
         </div>
     </div>
 
     <div id="reg-overlay" class="overlay">
-        <div class="modal">
-            <h2 style="color: var(--green); margin-bottom: 8px;">Регистрация в X CLUB</h2>
-            <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Заполни карточку участника для прохождения Face control и участия в клубном зачёте.</p>
-            <input type="text" id="reg-name" placeholder="Имя и Фамилия (например: Иван Петров)">
-            <input type="text" id="reg-squad" placeholder="Номер отряда (например: 2 отряд)">
+        <div class="modal-box">
+            <div style="font-size: 20px; font-weight: 800; color: var(--green); margin-bottom: 6px;">Регистрация в X CLUB</div>
+            <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Заполни карточку участника для прохождения Face Control и участия в зачёте.</p>
+            <input type="text" id="reg-name" class="input" placeholder="Имя и Фамилия (например: Иван Петров)">
+            <input type="text" id="reg-squad" class="input" placeholder="Номер отряда (например: 2 отряд)">
             <button class="btn" onclick="registerUser()">Создать аккаунт ♠️</button>
         </div>
     </div>
 
-    <div id="ban-overlay" class="overlay ban-screen">
-        <div class="modal">
-            <div style="font-size: 48px; margin-bottom: 10px;">⛔</div>
-            <h1>ДОСТУП ЗАКРЫТ</h1>
-            <p style="color: #f5b7b1; font-size: 14px; margin-bottom: 14px;">Вы внесены в официальный <b>Бан-лист X CLUB</b>.</p>
-            <div style="background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; margin-bottom: 16px; font-size: 13px;">
-                <span style="color: var(--muted);">Причина:</span><br>
-                <b id="ban-reason-text" style="color: #fff;">Нарушение правил клуба</b>
+    <div id="ban-overlay" class="overlay">
+        <div class="modal-box ban-screen">
+            <div style="font-size: 46px; margin-bottom: 10px;">⛔</div>
+            <div style="font-size: 20px; font-weight: 900; color: var(--red); margin-bottom: 8px;">ДОСТУП ЗАКРЫТ</div>
+            <p style="color: #fff; font-weight: 600;">Вы внесены в чёрный список X club.</p>
+            <div style="background: rgba(255,59,48,0.15); padding: 12px; border-radius: 10px; margin: 14px 0; text-align: left;">
+                <div style="font-size: 11px; color: var(--muted); text-transform: uppercase;">Причина блокировки:</div>
+                <div id="ban-reason-text" style="font-size: 14px; font-weight: 700; color: #fff; margin-top: 4px;">—</div>
             </div>
-            <p style="font-size: 12px; color: var(--muted);">По вопросам досрочного выхода из бан-листа (п. 8.3 — штраф 65 чайных пакетиков) обратитесь лично к Администрации клуба.</p>
+            <p style="font-size: 13px; color: var(--muted);">Согласно п. 5.5 Положения, разблокировка возможна только при внесении компенсации за материальный и моральный ущерб Администрации (от <b>65 чайных пакетиков</b>) по решению Владельца.</p>
         </div>
     </div>
 
-    <div id="vip-overlay" class="overlay vip-screen">
-        <div class="modal">
-            <div style="font-size: 48px; margin-bottom: 8px;">👑</div>
-            <h1>СТАТУС V.I.P. ПРИСВОЕН!</h1>
-            <p style="color: #f9e79f; font-size: 13px; margin-bottom: 14px;">Администрация X CLUB активировала для вас привилегированный доступ.</p>
-            <div style="text-align: left; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; margin-bottom: 16px; font-size: 12px; line-height: 1.5;">
-                • Предварительная бронь места за столом;<br>
-                • Бесплатный вход на закрытые игры (п. 7.2);<br>
-                • Приоритетное обслуживание.
+    <div id="vip-overlay" class="overlay">
+        <div class="modal-box vip-screen">
+            <div style="font-size: 46px; margin-bottom: 10px;">👑</div>
+            <div style="font-size: 20px; font-weight: 900; color: var(--gold); margin-bottom: 8px;">ПОЗДРАВЛЯЕМ!</div>
+            <p style="color: #fff; font-weight: 700; font-size: 15px;">Вам присвоен статус V.I.P. клиент!</p>
+            <div style="background: rgba(245,185,66,0.12); padding: 14px; border-radius: 12px; margin: 14px 0; text-align: left; font-size: 13px; line-height: 1.5;">
+                <b style="color: var(--gold);">Ваши привилегии (Раздел 4):</b><br>
+                • Предварительное бронирование места за столом;<br>
+                • Бесплатный вход на закрытые и спец. игры (п. 7.2);<br>
+                • Приоритетное (внеочередное) обслуживание.
             </div>
-            <button class="btn btn-gold" onclick="closeVipModal()">Принять привилегии ✨</button>
+            <button class="btn btn-gold" onclick="closeVipModal()">Отлично, в игру! 🔥</button>
         </div>
     </div>
 
-    <div id="status-modal" class="overlay" onclick="if(event.target===this) this.classList.remove('show')">
-        <div class="modal" style="text-align: left;">
-            <h2 id="st-modal-title" style="color: var(--gold); margin-bottom: 8px; text-align: center;">Статус аккаунта</h2>
-            <div id="st-modal-body" style="font-size: 13px; color: var(--muted); line-height: 1.55; margin-bottom: 14px;"></div>
-            <button class="btn btn-outline" onclick="document.getElementById('status-modal').classList.remove('show')">Закрыть</button>
+    <div id="status-info-overlay" class="overlay" onclick="if(event.target===this) closeStatusModal()">
+        <div class="modal-box">
+            <div id="status-modal-title" style="font-size: 18px; font-weight: 800; color: var(--gold); margin-bottom: 10px;">Статус участника</div>
+            <div id="status-modal-body" style="font-size: 13px; line-height: 1.55; color: #d0d7de;"></div>
+            <button class="btn btn-outline" style="margin-top: 14px;" onclick="closeStatusModal()">Закрыть</button>
         </div>
     </div>
 
-    <div id="tourn-modal" class="overlay" onclick="if(event.target===this) this.classList.remove('show')">
-        <div class="modal" style="text-align: left;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-                <h2 id="tm-title" style="color: var(--text); font-size: 18px;">Турнир</h2>
-                <span id="tm-badge" class="tourn-pill">Активен</span>
+    <div id="tourn-detail-overlay" class="overlay" onclick="if(event.target===this) closeTournModal()">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div>
+                    <div id="td-title" style="font-size: 18px; font-weight: 800; color: var(--text);">Турнир</div>
+                    <div id="td-date" style="font-size: 12px; color: var(--green); margin-top: 2px;">—</div>
+                </div>
+                <div onclick="closeTournModal()" style="font-size: 20px; color: var(--muted); cursor: pointer; padding: 0 6px;">✕</div>
             </div>
-            <div id="tm-date" style="font-size: 12px; color: var(--green); margin-bottom: 12px;"></div>
-            
+
             <div class="sub-tabs">
-                <div class="sub-tab active" onclick="switchTournTab('desc', this)">Описание</div>
-                <div class="sub-tab" onclick="switchTournTab('cost', this)">Взнос и места</div>
-                <div class="sub-tab" onclick="switchTournTab('blinds', this)">Блайнды</div>
+                <div class="sub-tab active" onclick="switchTournDetailTab('desc', this)">Описание</div>
+                <div class="sub-tab" onclick="switchTournDetailTab('format', this)">Взнос и места</div>
+                <div class="sub-tab" onclick="switchTournDetailTab('blinds', this)">Блайнды</div>
             </div>
 
-            <div id="tm-tab-desc" class="tm-pane" style="font-size: 13px; color: #d0ddd6; line-height: 1.5; margin-bottom: 12px; white-space: pre-line;"></div>
-            <div id="tm-tab-cost" class="tm-pane" style="display:none; font-size: 13px; color: #d0ddd6; line-height: 1.5; margin-bottom: 12px;"></div>
-            <div id="tm-tab-blinds" class="tm-pane" style="display:none; font-size: 12px; color: #d0ddd6; line-height: 1.5; margin-bottom: 12px; white-space: pre-line; background:#0f1210; padding:10px; border-radius:10px;"></div>
+            <div id="td-tab-desc" class="td-pane" style="font-size: 13px; line-height: 1.55; color: #d0d7de; white-space: pre-line;"></div>
+            <div id="td-tab-format" class="td-pane" style="display: none; font-size: 13px; line-height: 1.55;"></div>
+            <div id="td-tab-blinds" class="td-pane" style="display: none; font-size: 13px; line-height: 1.55; white-space: pre-line;"></div>
 
-            <div id="tm-action-area"></div>
-            <button class="btn btn-outline" onclick="document.getElementById('tourn-modal').classList.remove('show')">Закрыть окно</button>
+            <div id="td-action-wrap" style="margin-top: 14px;"></div>
         </div>
     </div>
 
     <div class="header">
-        <div class="logo-wrap">
-            <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://w3.org">
-                <path d="M18 15 C35 42, 62 68, 84 86" stroke="#2ecc71" stroke-width="12" stroke-linecap="round"/>
-                <path d="M82 14 C60 40, 38 65, 16 87" stroke="#f2f5f3" stroke-width="11" stroke-linecap="round"/>
-                <path d="M14 22 L26 12 M74 88 L88 80" stroke="#2ecc71" stroke-width="4" stroke-linecap="round"/>
-            </svg>
-            <div>
-                <div class="logo-title">X CLUB</div>
-                <span class="logo-sub">EST. 18.07.2025</span>
-            </div>
+        <div class="logo-box">
+            <img id="club-logo-img" src="https://placehold.co" class="logo-img" alt="X">
+            <div class="logo-text"><span>X</span> CLUB</div>
         </div>
-        <div class="badge" id="header-status" onclick="openStatusModal()">ИГРОК</div>
+        <div id="header-status" class="badge" onclick="openStatusModal()">ИГРОК</div>
     </div>
+    <!-- 1. ГЛАВНАЯ -->
     <div id="tab-home" class="section active">
-        <div class="hero-card">
-            <div class="hero-top">
-                <div>
-                    <div class="hero-tag">БЛИЖАЙШАЯ ИГРА</div>
-                    <div class="hero-title" id="home-tourn-title">FREEZEOUT<br>TOURNAMENT</div>
-                    <div class="hero-sub" id="home-tourn-sub">Техасский Холдем • Стек 1 000 у.е.</div>
-                </div>
-                <div style="text-align: right;">
-                    <div style="font-size: 11px; color: var(--muted);">ВЗНОС</div>
-                    <div class="hero-buyin" id="home-tourn-buyin" style="font-size: 18px; font-weight: 900; color: var(--green);">10 пак.</div>
-                </div>
+        <div class="card card-gold" id="home-next-tourn-card">
+            <div class="card-title" style="color: var(--gold);">
+                <span>🔥 Ближайшее событие</span>
+                <span style="font-size: 11px; color: var(--muted);" id="home-tourn-date">—</span>
             </div>
-            <div class="hero-bottom">
-                <div style="font-size: 12px; color: #b8c7bf;" id="home-tourn-time">⏰ Ежедневно 13:45 – 15:30</div>
-                <button class="hero-btn" onclick="switchTab('tournament', document.getElementById('nav-tourn'))">К турнирам ›</button>
+            <div id="home-tourn-title" style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Нет запланированных игр</div>
+            <p id="home-tourn-sub" style="font-size: 13px; color: var(--muted); margin-bottom: 10px;">Следите за анонсами в разделе «Турниры».</p>
+            <button class="btn btn-gold" onclick="switchTab('tournament', document.getElementById('nav-tourn'))">Открыть расписание ♠️</button>
+        </div>
+
+        <div class="grid-3">
+            <div class="stat-box">
+                <div class="stat-val" id="home-rank">—</div>
+                <div class="stat-lbl">Место в топе</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val" id="home-rating">0</div>
+                <div class="stat-lbl">Очки</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val" style="color: var(--gold); font-size: 13px; line-height: 22px;" id="home-status-short">ИГРОК</div>
+                <div class="stat-lbl">Статус</div>
             </div>
         </div>
 
         <div class="card">
-            <h2>Рейтинг растёт с <span>историей</span></h2>
-            <p>Твоя текущая позиция в клубном зачёте среди всех участников смены:</p>
-            <div class="stat-grid">
-                <div>
-                    <div class="stat-val" id="home-rank" style="color: var(--green);">—</div>
-                    <div class="stat-lbl">Место</div>
-                </div>
-                <div>
-                    <div class="stat-val" id="home-rating">0</div>
-                    <div class="stat-lbl">Очков</div>
-                </div>
-                <div>
-                    <div class="stat-val" id="home-status-short" style="font-size: 13px; padding-top: 4px;">ИГРОК</div>
-                    <div class="stat-lbl">Статус</div>
-                </div>
-            </div>
-            <button class="btn btn-outline" onclick="switchTab('rating', document.getElementById('nav-rating'))">Смотреть таблицу лидеров →</button>
-        </div>
-
-        <div class="card">
-            <h2>📂 Быстрый доступ</h2>
-            <div class="list-item" style="cursor:pointer; display:flex; justify-content:space-between;" onclick="switchTab('org', document.getElementById('nav-org'))">
-                <span>💵 Образцы купюр и файл устава</span><span style="color:var(--green);">›</span>
-            </div>
-            <div class="list-item" style="cursor:pointer; display:flex; justify-content:space-between;" onclick="switchTab('rules', document.getElementById('nav-rules'))">
-                <span>📜 Действующий свод X club RULES</span><span style="color:var(--green);">›</span>
-            </div>
+            <div class="card-title">📋 Допуск на игру (п. 2.2)</div>
+            <div class="list-item">✅ Регистрация в терминале <b>X club</b></div>
+            <div class="list-item">✅ Прохождение <b>Face Control</b></div>
+            <div class="list-item">✅ Соблюдение регламента и Положения</div>
         </div>
     </div>
 
+    <!-- 2. ТУРНИРЫ -->
     <div id="tab-tournament" class="section">
-        <div class="card">
-            <h2>🏆 Турниры <span>X CLUB</span></h2>
-            <p>Нажми на турнир, чтобы открыть описание, условия входа, сетку блайндов и записаться на игру.</p>
-            <div class="sub-tabs">
-                <div class="sub-tab active" id="st-active" onclick="filterTournaments('ACTIVE', this)">Активные</div>
-                <div class="sub-tab" id="st-archive" onclick="filterTournaments('ARCHIVE', this)">Архив</div>
-            </div>
-            <div id="tournaments-list">Загрузка расписания...</div>
+        <div class="sub-tabs">
+            <div class="sub-tab active" onclick="switchTournListMode('ACTIVE', this)">🔥 Активные</div>
+            <div class="sub-tab" onclick="switchTournListMode('ARCHIVE', this)">📁 Архив игр</div>
+        </div>
+        <div id="tournaments-list">
+            <p style="color: var(--muted);">Загрузка списка турниров...</p>
         </div>
     </div>
 
+    <!-- 3. РЕЙТИНГ -->
     <div id="tab-rating" class="section">
+        <div class="card card-gold" style="padding: 14px;">
+            <div class="card-title" style="color: var(--gold); font-size: 14px; margin-bottom: 6px;">💡 Как попасть в таблицу лидеров?</div>
+            <p style="font-size: 12px; color: #d0d7de; margin-bottom: 0;">В рейтинге отображаются только игроки, набравшие <b>от 1 очка и выше</b>. Очки начисляются за участие в официальных турнирах X CLUB и призовые места за финальным столом.</p>
+        </div>
+
+        <div class="grid-3">
+            <div class="stat-box">
+                <div class="stat-val" id="rat-rank">—</div>
+                <div class="stat-lbl">Твоё место</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val" id="rat-pts">0</div>
+                <div class="stat-lbl">Очки</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val" style="color: var(--gold);" id="rat-total">0</div>
+                <div class="stat-lbl">В рейтинге</div>
+            </div>
+        </div>
+
         <div class="card">
-            <h2>📊 Клубный <span>зачёт</span></h2>
-            <div class="info-box">
-                <b>💡 Как попасть в таблицу лидеров?</b><br>
-                В рейтинге участвуют только игроки с <b>1 и более очком</b>. Очки начисляются за участие и призовые места в турнирах: <b>🥇 1 место (+50)</b>, <b>🥈 2 место (+30)</b>, <b>🥉 3 место (+15)</b>, участие в игре (+5).
+            <div class="card-title">🏆 Таблица лидеров X club</div>
+            <div id="rating-list">
+                <p style="color: var(--muted);">Загрузка рейтинга...</p>
             </div>
-            <div class="stat-grid" style="margin-bottom: 14px;">
-                <div>
-                    <div class="stat-val" id="rat-rank" style="color: var(--green);">—</div>
-                    <div class="stat-lbl">Ваше место</div>
-                </div>
-                <div>
-                    <div class="stat-val" id="rat-pts">0</div>
-                    <div class="stat-lbl">Рейтинг</div>
-                </div>
-                <div>
-                    <div class="stat-val" id="rat-total">0</div>
-                    <div class="stat-lbl">В рейтинге</div>
-                </div>
-            </div>
-            <div id="rating-list">Загрузка рейтинга...</div>
         </div>
     </div>
+
+    <!-- 4. ОРГ. МОМЕНТЫ -->
     <div id="tab-org" class="section">
         <div class="card">
-            <h2>📂 Организационные <span>моменты</span></h2>
-            <p>Официальные документы, образцы расчётных знаков и регламенты клуба.</p>
+            <div class="card-title">📄 Официальный регламент</div>
+            <p style="font-size: 13px;">Полное Положение о проведении мероприятий и внутренний устав клуба <b>X club</b>:</p>
+            <a id="rules-doc-link" href="https://google.com" target="_blank" class="btn btn-outline">Открыть файл с правилами 📑</a>
+        </div>
 
-            <div class="info-box" style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <b>📄 Полный устав X club RULES</b><br>
-                    <span style="font-size:11px; color:var(--muted);">Официальный документ со всеми разделами и печатями</span>
-                </div>
-                <a href="https://t.me" target="_blank" class="btn btn-sm" style="margin-top:0;">Открыть ↗</a>
-            </div>
+        <div class="card">
+            <div class="card-title">👑 Привилегии V.I.P. (Раздел 4)</div>
+            <div class="list-item">• <b>Бронирование места</b> за игровым столом до старта.</div>
+            <div class="list-item">• <b>Бесплатный вход</b> на закрытые и спец. игры (п. 7.2).</div>
+            <div class="list-item">• <b>Приоритетное обслуживание</b> без очереди.</div>
+            <div class="list-item" style="color: var(--muted); font-size: 12px;">Статус выдаётся Владельцем на фиксированный срок. Нажмите на свой статус в правом верхнем углу экрана, чтобы проверить срок действия или условия продления.</div>
+        </div>
 
-            <details open>
-                <summary>💵 Образцы купюр X Club Rus (90×50 мм)</summary>
-                <div class="details-body">
-                    <p style="font-size: 12px; margin-bottom: 8px;">К игре допускаются только оригинальные расчётные знаки установленного образца с фирменным логотипом и штампом Администрации. Доступные номиналы: <b>10, 50, 100, 500 у.е.</b></p>
-                    <div class="banknote-preview">
-                        <div class="bn-top"><span>X CLUB BANK</span><span>СЕРИЯ: X-RUS</span></div>
-                        <div class="bn-center">
-                            <div class="bn-nominal">100 У.Е.</div>
-                            <div class="bn-sub">РАСЧЁТНЫЙ ЗНАК КЛУБА</div>
-                        </div>
-                        <div class="bn-bottom"><span>РАЗМЕР: 90×50 ММ</span><span>🔒 ОРИГИНАЛ</span></div>
-                        <div class="bn-guard">ЗАЩИЩЕНО УСТАВОМ X CLUB • ПОДДЕЛКА КАРАЕТСЯ БАНОМ</div>
-                    </div>
-                </div>
-            </details>
-
-            <details>
-                <summary>🏦 X club bank (Бланк целевого займа)</summary>
-                <div class="details-body">
-                    <b>Условия кредитования на вход (п. 4 Регламента):</b><br>
-                    • Сумма выдачи: <b>10 чайных пакетиков</b> (сразу идут в банк турнира).<br>
-                    • Сумма возврата: <b>12 чайных пакетиков</b> в установленный распиской срок.<br>
-                    • Оформляется исключительно при подписании бумажного бланка долговой расписки.<br>
-                    • Просрочка регулируется Положением 9.3 X club Rules.
-                </div>
-            </details>
-
-            <details>
-                <summary>💼 Штатное расписание (X club Work)</summary>
-                <div class="details-body">
-                    Официальное трудоустройство по контракту сотрудника (Раздел 10):<br>
-                    • <b>Dealer</b> (Дилер / Крупье)<br>
-                    • <b>Face control</b> (Служба контроля доступа)<br>
-                    • <b>Маркетолог</b><br>
-                    • <b>Дизайнер</b><br>
-                    • <b>Special worker</b> (Специальный сотрудник)
-                </div>
-            </details>
+        <div class="card">
+            <div class="card-title">🛡 Face Control и Чёрный список</div>
+            <div class="list-item">• <b>Face Control (п. 5.1):</b> Администрация вправе отказать во входе без объяснения причин.</div>
+            <div class="list-item">• <b>Чёрный список (п. 5.5):</b> Выход из бана возможен только после компенсации ущерба Администрации (от <b>65 чайных пакетиков</b>).</div>
         </div>
     </div>
-
+    <!-- 5. ПРАВИЛА -->
     <div id="tab-rules" class="section">
         <div class="card">
-            <h2>📜 Свод законов <span>X club RULES</span></h2>
-            <div class="list-item"><b>1. Правила входа:</b> Вход означает безусловное согласие с правилами. Действует система Face control.</div>
-            <div class="list-item"><b>2. Ответственность:</b> Администрация не несёт ответственности за поведение, эмоции и личные вещи участников.</div>
-            <div class="list-item"><b>3. Имущество:</b> За порчу/утрату инвентаря, карт, вывесок и расчётных знаков (90×50 мм) — полная компенсация.</div>
-            <div class="list-item"><b>4. V.I.P. клиенты:</b> Стоимость: 10 пак. (3 дня) / 25 пак. (долгосрочный). На 5–8 (9) отряды не распространяется.</div>
-            <div class="list-item"><b>5. Проведение игры:</b> Техасский Холдем (джокеры и блайнды — на усмотрение Администрации).</div>
-            <div class="list-item"><b>6. Режим работы:</b> Ежедневно с 13:45 до 15:30. 5–8 (9) отрядам вход запрещён. Основан 18.07.2025.</div>
-            <div class="list-item"><b>7. Комиссия:</b> Вход в игру — 1 пакетик (для V.I.P. бесплатно). С банка от 5 пакетиков рейк — 1 пакетик.</div>
-            <div class="list-item"><b>8. Авторское право:</b> За использование знаков «$*», логотипа X club или «Take и TEA» — бан до конца смены (выкуп из бан-листа — штраф 65 пакетиков).</div>
-            <div class="list-item"><b>9. X club bank:</b> Займы до 3 дней под залог или процент.</div>
-            <div class="list-item"><b>12. Лицензирование:</b> Право на использование символики клуба — 100 пакетиков с оформлением лицензии.</div>
+            <div class="card-title">🃏 Комбинации покера</div>
+            <div class="list-item"><b>1. Роял-флеш:</b> A-K-Q-J-10 одной масти</div>
+            <div class="list-item"><b>2. Стрит-флеш:</b> 5 карт по порядку одной масти</div>
+            <div class="list-item"><b>3. Каре:</b> 4 карты одного достоинства</div>
+            <div class="list-item"><b>4. Фулл-хаус:</b> Тройка + Пара</div>
+            <div class="list-item"><b>5. Флеш:</b> Любые 5 карт одной масти</div>
+            <div class="list-item"><b>6. Стрит:</b> 5 карт по порядку разных мастей</div>
+            <div class="list-item"><b>7. Сет (Тройка):</b> 3 карты одного ранга</div>
+            <div class="list-item"><b>8. Две пары / Одна пара / Старшая карта</b></div>
+        </div>
+        <div class="card" style="border-color: rgba(255,59,48,0.35);">
+            <div class="card-title" style="color: var(--red);">🚫 Запрещено за столом</div>
+            <p>Подсказки зрителей, тимплей, сокрытие номиналов фишек (п. 3.3), оскорбления и провокации. За нарушение — бан (Раздел 5).</p>
         </div>
     </div>
 
+    <!-- 6. ПРОФИЛЬ -->
     <div id="tab-profile" class="section">
-        <div class="card">
-            <h2>🪪 Личные <span>данные</span></h2>
-            <div class="list-item"><b>Игрок:</b> <span id="prof-name">—</span></div>
+        <div class="card" id="profile-main-card">
+            <div class="card-title">
+                <span>🪪 Карточка участника</span>
+                <span id="prof-owner-badge" style="display: none; color: var(--gold); font-size: 12px;">👑 ВЛАДЕЛЕЦ</span>
+            </div>
+            <div class="list-item"><b>Имя:</b> <span id="prof-name">—</span></div>
             <div class="list-item"><b>Отряд:</b> <span id="prof-squad">—</span></div>
-            <div class="list-item"><b>Статус:</b> <span id="prof-status">ИГРОК</span></div>
-            <div class="list-item" id="prof-role-wrap" style="display:none;"><b>Должность (X club Work):</b> <span id="prof-role" style="color: var(--green); font-weight: bold;"></span></div>
+            <div class="list-item"><b>Статус:</b> <span id="prof-status" style="color: var(--green); font-weight: 700;">—</span></div>
+            <div class="list-item" id="prof-vip-timer-wrap" style="display: none;"><b>V.I.P. действует до:</b> <span id="prof-vip-until" style="color: var(--gold); font-weight: 700;">—</span></div>
+            <div class="list-item" id="prof-role-wrap" style="display: none;"><b>Должность:</b> <span id="prof-role" style="color: var(--gold);">—</span></div>
             <div class="list-item"><b>Telegram ID:</b> <span id="prof-id" style="color: var(--muted);">—</span></div>
         </div>
-
-        <details>
-            <summary>👑 Мои привилегии (Раздел 4)</summary>
-            <div class="details-body" id="prof-privileges">
-                Базовый доступ участника. Для получения расширенных привилегий (бронь места, бесплатный вход на закрытые игры, приоритетное обслуживание) требуется статус <b>V.I.P. клиент</b>.
-            </div>
-        </details>
-
-        <div class="card">
-            <h2>📡 Официальный канал</h2>
-            <p>Единственный официальный информационный ресурс клуба в Telegram (Раздел 13):</p>
-            <a href="https://t.me" target="_blank" class="btn btn-outline">Перейти в канал X club ↗</a>
-        </div>
     </div>
 
+    <!-- 7. АДМИН-ПАНЕЛЬ -->
     <div id="tab-admin" class="section">
-        <div class="card">
-            <h2>🏆 Создать <span>турнир</span></h2>
-            <p>Добавь новую игру — она сразу появится в активных турнирах и откроется для записи игроков:</p>
-            <input type="text" id="nt-title" placeholder="Название (например: Freezeout Cup)">
-            <input type="text" id="nt-date" placeholder="Дата и время (например: Завтра, 13:45)">
-            <input type="text" id="nt-buyin" placeholder="Взнос (например: 10 чайных пакетиков)">
-            <input type="number" id="nt-max" placeholder="Максимум мест за столом (например: 10)">
-            <textarea id="nt-desc" rows="3" placeholder="Описание и призовой фонд (1, 2, 3 места)..."></textarea>
-            <textarea id="nt-blinds" rows="3" placeholder="Сетка блайндов (например: 1 круг 10/20, 2 круг 15/30...)"></textarea>
-            <button class="btn" onclick="createTournament()">Опубликовать турнир ♠️</button>
+        <div class="sub-tabs">
+            <div class="sub-tab active" onclick="switchAdminSubTab('players', this)">👥 Игроки</div>
+            <div class="sub-tab" onclick="switchAdminSubTab('tourns', this)">🏆 Турниры</div>
         </div>
 
-        <div class="card">
-            <h2>👥 Управление <span>игроками</span></h2>
-            <p>Выдача временного V.I.P., начисление рейтинга, должности и бан-лист:</p>
-            <div id="admin-players-list">Загрузка списка...</div>
+        <div id="admin-sub-players">
+            <div class="card" style="border-color: var(--gold);">
+                <div class="card-title" style="color: var(--gold);">🛡 Управление участниками</div>
+                <div id="admin-players-list">Загрузка списка...</div>
+            </div>
+        </div>
+
+        <div id="admin-sub-tourns" style="display: none;">
+            <div class="card" style="border-color: var(--gold);">
+                <div class="card-title" style="color: var(--gold);">➕ Создать новый турнир</div>
+                <input type="text" id="new-t-title" class="input" placeholder="Название (например: Вечерний Кубок X CLUB)">
+                <input type="text" id="new-t-date" class="input" placeholder="Дата и время (например: Завтра, 20:30)">
+                <input type="text" id="new-t-buyin" class="input" placeholder="Взнос / Вход (например: 20 чайных пакетиков / VIP бесплатно)">
+                <input type="number" id="new-t-max" class="input" placeholder="Максимум мест за столом (например: 10)">
+                <textarea id="new-t-desc" class="input" placeholder="Описание турнира, призовой фонд и формат игры..."></textarea>
+                <textarea id="new-t-blinds" class="input" placeholder="Сетка блайндов (например: Ур.1: 10/20 (10 мин)...)"></textarea>
+                <button class="btn btn-gold" onclick="createTournament()">Опубликовать турнир ♠️</button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📋 Активные турниры (управление)</div>
+                <div id="admin-tourns-list">Нет активных турниров</div>
+            </div>
         </div>
     </div>
 
+    <!-- НИЖНЕЕ МЕНЮ -->
     <div class="tabs-wrapper">
         <div class="tabs">
-            <div class="tab active" id="nav-home" onclick="switchTab('home', this)"><span class="icon">🏠</span>Главная</div>
+            <div class="tab active" id="nav-home" onclick="switchTab('home', this)"><span class="icon">♠️</span>Главная</div>
             <div class="tab" id="nav-tourn" onclick="switchTab('tournament', this)"><span class="icon">🏆</span>Турниры</div>
             <div class="tab" id="nav-rating" onclick="switchTab('rating', this)"><span class="icon">📊</span>Рейтинг</div>
-            <div class="tab" id="nav-org" onclick="switchTab('org', this)"><span class="icon">📂</span>Орг. моменты</div>
-            <div class="tab" id="nav-rules" onclick="switchTab('rules', this)"><span class="icon">📜</span>Правила</div>
+            <div class="tab" id="nav-org" onclick="switchTab('org', this)"><span class="icon">📋</span>Орг. мом.</div>
+            <div class="tab" id="nav-rules" onclick="switchTab('rules', this)"><span class="icon">📖</span>Правила</div>
             <div class="tab" id="nav-profile" onclick="switchTab('profile', this)"><span class="icon">🪪</span>Профиль</div>
-            <div class="tab" id="nav-admin" style="display:none; color: var(--gold);" onclick="switchTab('admin', this)"><span class="icon">🛡️</span>Админ</div>
+            <div class="tab" id="nav-admin" style="display:none; color: var(--gold);" onclick="switchTab('admin', this)"><span class="icon">👑</span>Админ</div>
         </div>
     </div>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMphAD9srGIetdrrT-5fuhH4-vysI1mTozFZAYfBm501OnqUy2181oU9lXVvko2BBzkQ/exec";
+        const OWNER_ID = "5867953216";
 
         const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : {
             expand: () => {},
@@ -410,45 +359,103 @@
         };
         tg.expand();
 
-        // Железное получение настоящего Telegram ID (работает даже если скрипт TG не прогрузился из-за VPN)
-        function getRealTelegramUser() {
+        // Железное извлечение настоящего Telegram ID (работает даже при блокировке SDK через VPN)
+        function getRealTelegramId() {
             if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
-                return tg.initDataUnsafe.user;
+                return String(tg.initDataUnsafe.user.id);
             }
             try {
-                const hash = window.location.hash.substring(1);
-                const params = new URLSearchParams(hash);
-                const webAppData = params.get('tgWebAppData');
-                if (webAppData) {
-                    const dataParams = new URLSearchParams(webAppData);
-                    const userJson = dataParams.get('user');
-                    if (userJson) return JSON.parse(userJson);
+                const rawHash = window.location.hash.slice(1) || window.location.search.slice(1);
+                const params = new URLSearchParams(rawHash);
+                const tgData = params.get("tgWebAppData");
+                if (tgData) {
+                    const userParam = new URLSearchParams(tgData).get("user");
+                    if (userParam) {
+                        const parsed = JSON.parse(userParam);
+                        if (parsed && parsed.id) return String(parsed.id);
+                    }
                 }
             } catch (e) {}
             return null;
         }
 
-        const realUser = getRealTelegramUser();
-        const currentTgId = realUser ? String(realUser.id) : null;
+        const currentTgId = getRealTelegramId();
+        let appData = null;
+        let currentTournMode = "ACTIVE";
+        let selectedTourn = null;
 
-        let globalData = null;
-        let currentTournFilter = "ACTIVE";
-        let openedTournament = null;
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            if (el) el.classList.add('active');
+        }
+
+        function switchAdminSubTab(sub, el) {
+            el.parentElement.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('admin-sub-players').style.display = sub === 'players' ? 'block' : 'none';
+            document.getElementById('admin-sub-tourns').style.display = sub === 'tourns' ? 'block' : 'none';
+        }
+
+        function formatRemainingTime(untilMs) {
+            const diff = untilMs - Date.now();
+            if (diff <= 0) return "Срок истёк";
+            const hrs = Math.floor(diff / (1000 * 60 * 60));
+            const days = Math.floor(hrs / 24);
+            const remHrs = hrs % 24;
+            if (days > 0) return `${days} дн. ${remHrs} ч.`;
+            return `${hrs} ч. ${Math.floor((diff / (1000 * 60)) % 60)} мин.`;
+        }
+
+        function openStatusModal() {
+            if (!appData) return;
+            const titleEl = document.getElementById('status-modal-title');
+            const bodyEl = document.getElementById('status-modal-body');
+
+            if (currentTgId === OWNER_ID) {
+                titleEl.innerText = "👑 Статус: ВЛАДЕЛЕЦ КЛУБА";
+                bodyEl.innerHTML = "Полный административный доступ к терминалу X CLUB, управлению турнирами, рейтингом и базой участников.";
+            } else if (appData.status === "VIP") {
+                const timeStr = appData.vip_until > 0
+                    ? `Осталось: <b style="color:var(--gold);">${formatRemainingTime(appData.vip_until)}</b> (до ${new Date(appData.vip_until).toLocaleString('ru-RU', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})})`
+                    : "Бессрочный статус";
+                titleEl.innerText = "👑 Статус: V.I.P. КЛИЕНТ";
+                bodyEl.innerHTML = `
+                    <div style="background:rgba(245,185,66,0.12); padding:10px; border-radius:10px; margin-bottom:10px;">${timeStr}</div>
+                    <b>Ваши привилегии:</b><br>
+                    • Бронирование места за столом до старта;<br>
+                    • Бесплатный вход на закрытые игры (п. 7.2);<br>
+                    • Приоритетное обслуживание.<br><br>
+                    <b>Как продлить:</b> обратитесь к Владельцу или Администратору X CLUB до истечения таймера.
+                `;
+            } else {
+                titleEl.innerText = "♠️ Статус: ИГРОК";
+                bodyEl.innerHTML = `
+                    Базовый статус участника клуба <b>X CLUB</b>.<br><br>
+                    <b style="color:var(--gold);">Что даёт статус V.I.P.:</b><br>
+                    • Предварительная бронь места за столом;<br>
+                    • Бесплатный вход на закрытые турниры;<br>
+                    • Приоритетное обслуживание.<br><br>
+                    <b>Как получить:</b> выдаётся Владельцем клуба за активность, победы или по условиям смены (Раздел 4 Положения).
+                `;
+            }
+            document.getElementById('status-info-overlay').classList.add('show');
+        }
+
+        function closeStatusModal() {
+            document.getElementById('status-info-overlay').classList.remove('show');
+        }
 
         async function loadData() {
             if (!currentTgId) {
-                document.getElementById('notg-overlay').classList.add('show');
+                document.getElementById('not-tg-overlay').classList.add('show');
                 return;
             }
-
             try {
-                const res = await fetch(`${SCRIPT_URL}?action=get&tg_id=${currentTgId}`, {
-                    method: "GET",
-                    redirect: "follow"
-                });
+                const res = await fetch(`${SCRIPT_URL}?action=get&tg_id=${currentTgId}`, { method: "GET", redirect: "follow" });
                 const data = await res.json();
-                globalData = data;
-                document.getElementById('loader').classList.remove('show');
+                appData = data;
 
                 if (!data.found) {
                     document.getElementById('reg-overlay').classList.add('show');
@@ -464,7 +471,7 @@
                 const rankText = data.rank !== "—" ? `#${data.rank}` : "—";
                 document.getElementById('home-rank').innerText = rankText;
                 document.getElementById('home-rating').innerText = data.rating;
-                document.getElementById('home-status-short').innerText = data.isAdmin ? "ВЛАДЕЛЕЦ" : data.status;
+                document.getElementById('home-status-short').innerText = (currentTgId === OWNER_ID) ? "ВЛАДЕЛЕЦ" : data.status;
 
                 document.getElementById('rat-rank').innerText = rankText;
                 document.getElementById('rat-pts').innerText = data.rating;
@@ -472,7 +479,7 @@
 
                 document.getElementById('prof-name').innerText = data.name;
                 document.getElementById('prof-squad').innerText = data.squad;
-                document.getElementById('prof-status').innerText = data.isAdmin ? "👑 ВЛАДЕЛЕЦ КЛУБА" : data.status;
+                document.getElementById('prof-status').innerText = (currentTgId === OWNER_ID) ? "👑 ВЛАДЕЛЕЦ КЛУБА" : data.status;
                 document.getElementById('prof-id').innerText = currentTgId;
 
                 if (data.role) {
@@ -483,224 +490,42 @@
                 const headerBadge = document.getElementById('header-status');
                 headerBadge.classList.remove('vip', 'owner');
 
-                if (data.isAdmin) {
+                if (currentTgId === OWNER_ID) {
                     headerBadge.innerText = "👑 ВЛАДЕЛЕЦ";
                     headerBadge.classList.add('owner');
-                    document.getElementById('prof-privileges').innerHTML = `<b style="color:var(--gold);">Полный доступ Владельца X CLUB:</b> управление турнирами, статусами V.I.P., рейтингом и бан-листом.`;
+                    document.getElementById('prof-owner-badge').style.display = 'inline';
+                    document.getElementById('profile-main-card').classList.add('card-gold');
                 } else if (data.status === "VIP") {
-                    headerBadge.innerText = "V.I.P. ▾";
+                    headerBadge.innerText = "👑 V.I.P.";
                     headerBadge.classList.add('vip');
-                    document.getElementById('prof-privileges').innerHTML = `
-                        <b style="color:var(--gold);">Активен статус V.I.P. клиент:</b><br>
-                        • Предварительное бронирование места за столом;<br>
-                        • Бесплатный вход на закрытые игры (п. 7.2);<br>
-                        • Приоритетное обслуживание.
-                    `;
+                    if (data.vip_until > 0) {
+                        document.getElementById('prof-vip-timer-wrap').style.display = 'block';
+                        document.getElementById('prof-vip-until').innerText = formatRemainingTime(data.vip_until);
+                    }
                     if (!localStorage.getItem('vip_seen_' + currentTgId)) {
                         document.getElementById('vip-overlay').classList.add('show');
                     }
                 } else {
-                    headerBadge.innerText = (data.role ? data.role : "ИГРОК") + " ▾";
+                    headerBadge.innerText = data.role ? data.role : "ИГРОК";
                     localStorage.removeItem('vip_seen_' + currentTgId);
                 }
 
                 renderLeaderboard(data.leaderboard);
-                renderTournaments();
+                renderTournaments(data.tournaments || []);
 
                 if (data.isAdmin) {
-                    document.getElementById('nav-admin').style.display = 'flex';
+                    document.getElementById('nav-admin').style.display = 'block';
                     renderAdminList(data.allPlayers);
+                    renderAdminTourns(data.tournaments || []);
                 }
             } catch (e) {
-                document.getElementById('loader').classList.remove('show');
-                tg.showAlert("Ошибка связи с таблицей. Проверь SCRIPT_URL.");
+                tg.showAlert("Ошибка связи с сервером: " + e.message);
             }
         }
-        function openStatusModal() {
-            if (!globalData) return;
-            const title = document.getElementById('st-modal-title');
-            const body = document.getElementById('st-modal-body');
-
-            if (globalData.isAdmin) {
-                title.innerText = "👑 Статус: ВЛАДЕЛЕЦ";
-                body.innerHTML = "Вы являетесь основателем и главным администратором <b>X CLUB</b>. Доступ ко всем разделам и управлению базой данных неограничен.";
-            } else if (globalData.status === "VIP") {
-                title.innerText = "👑 Статус: V.I.P. КЛИЕНТ";
-                let timeLeft = "До конца смены";
-                if (globalData.vip_until && globalData.vip_until > 0) {
-                    const diff = globalData.vip_until - Date.now();
-                    if (diff > 0) {
-                        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-                        timeLeft = `${days} дн. ${hours} ч.`;
-                    } else {
-                        timeLeft = "Истекает прямо сейчас";
-                    }
-                }
-                body.innerHTML = `
-                    <div style="background:#0f1210; padding:10px; border-radius:10px; margin-bottom:10px; color:#fff;">
-                        ⏳ <b>Осталось времени:</b> <span style="color:var(--gold);">${timeLeft}</span>
-                    </div>
-                    <b>Ваши привилегии:</b><br>
-                    • Бронь места за столом до старта;<br>
-                    • Бесплатный вход на закрытые игры (п. 7.2);<br>
-                    • Приоритетное обслуживание.<br><br>
-                    <b>Как продлить:</b> обратитесь к Администрации клуба (10 пак. — 3 дня / 25 пак. — до конца смены).
-                `;
-            } else {
-                title.innerText = "🪪 Статус: ИГРОК";
-                body.innerHTML = `
-                    У вас базовый статус участника <b>X CLUB</b>.<br><br>
-                    <b>Как получить V.I.P. (Раздел 4):</b><br>
-                    • Оформить у Администрации: <b>10 чайных пакетиков</b> (на 3 дня) или <b>25 пакетиков</b> (до конца смены);<br>
-                    • Либо занять <b>1 или 2 место</b> в турнире Freezeout.<br><br>
-                    <i>Примечание: на 5–8 (9) отряды статус V.I.P. не распространяется.</i>
-                `;
-            }
-            document.getElementById('status-modal').classList.add('show');
-        }
-
-        function filterTournaments(status, el) {
-            currentTournFilter = status;
-            document.getElementById('st-active').classList.remove('active');
-            document.getElementById('st-archive').classList.remove('active');
-            if (el) el.classList.add('active');
-            renderTournaments();
-        }
-
-        function renderTournaments() {
-            const container = document.getElementById('tournaments-list');
-            const all = (globalData && globalData.tournaments) ? globalData.tournaments : [];
-            const activeList = all.filter(t => t.status === "ACTIVE");
-
-            if (activeList.length > 0) {
-                const top = activeList;
-                document.getElementById('home-tourn-title').innerText = top.title;
-                document.getElementById('home-tourn-sub').innerText = `Мест: ${top.players.length}/${top.max_players} • Нажми для записи`;
-                document.getElementById('home-tourn-buyin').innerText = top.buyin;
-                document.getElementById('home-tourn-time').innerText = `⏰ ${top.date_time}`;
-            }
-
-            const filtered = all.filter(t => t.status === currentTournFilter);
-            if (filtered.length === 0) {
-                container.innerHTML = `<p style="text-align:center; padding:12px 0;">${currentTournFilter === "ACTIVE" ? "Пока нет активных турниров." : "Архив прошедших игр пуст."}</p>`;
-                return;
-            }
-
-            container.innerHTML = "";
-            filtered.forEach(t => {
-                const isJoined = t.players.some(p => String(p.tg_id) === currentTgId);
-                const badgeText = t.status === "ARCHIVE" ? "Завершён" : (isJoined ? "Вы записаны ✓" : `${t.players.length}/${t.max_players} мест`);
-                container.innerHTML += `
-                    <div class="tourn-item" onclick="openTournamentModal('${t.id}')">
-                        <div class="tourn-head">
-                            <span class="tourn-title">${t.title}</span>
-                            <span class="tourn-pill">${badgeText}</span>
-                        </div>
-                        <div style="font-size:12px; color:var(--muted);">⏰ ${t.date_time} • Взнос: <b style="color:var(--text);">${t.buyin}</b></div>
-                    </div>
-                `;
-            });
-        }
-
-        function openTournamentModal(tId) {
-            const t = globalData.tournaments.find(item => item.id === tId);
-            if (!t) return;
-            openedTournament = t;
-
-            document.getElementById('tm-title').innerText = t.title;
-            document.getElementById('tm-date').innerText = `⏰ ${t.date_time} • Взнос: ${t.buyin}`;
-            document.getElementById('tm-badge').innerText = t.status === "ARCHIVE" ? "Архив" : `${t.players.length}/${t.max_players} мест`;
-
-            document.getElementById('tm-tab-desc').innerText = t.description || "Описание не указано.";
-            document.getElementById('tm-tab-blinds').innerText = t.blinds || "Стандартная сетка блайндов X CLUB.";
-
-            let playersHtml = t.players.length > 0
-                ? t.players.map((p, i) => `${i + 1}. ${p.name} ${p.status === 'VIP' ? '👑' : ''}`).join('<br>')
-                : "Пока никто не записался.";
-
-            document.getElementById('tm-tab-cost').innerHTML = `
-                <b>Стоимость входа:</b> ${t.buyin}<br>
-                <b>Свободно мест:</b> ${Math.max(0, t.max_players - t.players.length)} из ${t.max_players}<br><br>
-                <b>Список участников:</b><br>
-                <div style="background:#0f1210; padding:10px; border-radius:10px; margin-top:6px; font-size:12px;">${playersHtml}</div>
-            `;
-
-            switchTournTab('desc', document.querySelector('#tourn-modal .sub-tab'));
-
-            const actionArea = document.getElementById('tm-action-area');
-            actionArea.innerHTML = "";
-
-            if (t.status === "ACTIVE") {
-                const isJoined = t.players.some(p => String(p.tg_id) === currentTgId);
-                if (isJoined) {
-                    actionArea.innerHTML += `<button class="btn btn-outline" disabled>Вы уже в списке участников ✓</button>`;
-                } else if (t.players.length >= t.max_players) {
-                    actionArea.innerHTML += `<button class="btn btn-outline" disabled>Все места за столом заняты</button>`;
-                } else {
-                    actionArea.innerHTML += `<button class="btn" onclick="joinTournament('${t.id}')">Записаться на турнир ♠️</button>`;
-                }
-
-                if (globalData.isAdmin) {
-                    actionArea.innerHTML += `<button class="btn btn-red" onclick="archiveTournament('${t.id}')">Завершить и убрать в архив 📦</button>`;
-                }
-            }
-
-            document.getElementById('tourn-modal').classList.add('show');
-        }
-        function switchTournTab(pane, el) {
-            document.querySelectorAll('#tourn-modal .sub-tab').forEach(b => b.classList.remove('active'));
-            if (el) el.classList.add('active');
-            document.querySelectorAll('.tm-pane').forEach(p => p.style.display = 'none');
-            document.getElementById('tm-tab-' + pane).style.display = 'block';
-        }
-
-        async function joinTournament(tId) {
-            document.getElementById('tourn-modal').classList.remove('show');
-            document.getElementById('loader').classList.add('show');
-            try {
-                await fetch(`${SCRIPT_URL}?action=join_tournament&tg_id=${currentTgId}&t_id=${tId}&name=${encodeURIComponent(globalData.name)}&status=${encodeURIComponent(globalData.status)}`, { mode: "no-cors" });
-            } catch (e) {}
-            setTimeout(() => { document.getElementById('loader').classList.remove('show'); loadData(); }, 1500);
-        }
-
-        async function createTournament() {
-            const title = document.getElementById('nt-title').value.trim();
-            const date = document.getElementById('nt-date').value.trim();
-            const buyin = document.getElementById('nt-buyin').value.trim();
-            const max = document.getElementById('nt-max').value.trim() || "10";
-            const desc = document.getElementById('nt-desc').value.trim();
-            const blinds = document.getElementById('nt-blinds').value.trim();
-
-            if (!title || !date || !buyin) return tg.showAlert("Заполни название, дату и взнос!");
-
-            document.getElementById('loader').classList.add('show');
-            try {
-                await fetch(`${SCRIPT_URL}?action=add_tournament&tg_id=${currentTgId}&title=${encodeURIComponent(title)}&date_time=${encodeURIComponent(date)}&buyin=${encodeURIComponent(buyin)}&max_players=${max}&description=${encodeURIComponent(desc)}&blinds=${encodeURIComponent(blinds)}`, { mode: "no-cors" });
-            } catch (e) {}
-
-            document.getElementById('nt-title').value = "";
-            document.getElementById('nt-date').value = "";
-            document.getElementById('nt-buyin').value = "";
-            document.getElementById('nt-desc').value = "";
-            document.getElementById('nt-blinds').value = "";
-
-            setTimeout(() => { document.getElementById('loader').classList.remove('show'); loadData(); }, 1500);
-        }
-
-        async function archiveTournament(tId) {
-            document.getElementById('tourn-modal').classList.remove('show');
-            document.getElementById('loader').classList.add('show');
-            try {
-                await fetch(`${SCRIPT_URL}?action=archive_tournament&tg_id=${currentTgId}&t_id=${tId}`, { mode: "no-cors" });
-            } catch (e) {}
-            setTimeout(() => { document.getElementById('loader').classList.remove('show'); loadData(); }, 1500);
-        }
-
         function renderLeaderboard(list) {
             const container = document.getElementById('rating-list');
             if (!list || list.length === 0) {
-                container.innerHTML = "<p style='text-align:center;'>Пока ни у кого нет очков рейтинга.</p>";
+                container.innerHTML = `<p style="color: var(--muted);">В рейтинге пока никого нет. Сыграйте первый турнир, чтобы набрать очки!</p>`;
                 return;
             }
             container.innerHTML = "";
@@ -729,6 +554,105 @@
             });
         }
 
+        function switchTournListMode(mode, el) {
+            currentTournMode = mode;
+            el.parentElement.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            renderTournaments(appData ? appData.tournaments : []);
+        }
+
+        function renderTournaments(list) {
+            const activeList = list.filter(t => t.status === "ACTIVE");
+            if (activeList.length > 0) {
+                const next = activeList.slice().shift();
+                document.getElementById('home-tourn-title').innerText = next.title;
+                document.getElementById('home-tourn-date').innerText = next.date_time;
+                document.getElementById('home-tourn-sub').innerText = `Взнос: ${next.buyin} • Мест: ${next.players.length}/${next.max_players}`;
+            } else {
+                document.getElementById('home-tourn-title').innerText = "Нет запланированных игр";
+                document.getElementById('home-tourn-date').innerText = "—";
+                document.getElementById('home-tourn-sub').innerText = "Следите за анонсами в разделе «Турниры».";
+            }
+
+            const container = document.getElementById('tournaments-list');
+            const filtered = list.filter(t => t.status === currentTournMode);
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="card"><p style="color:var(--muted); margin:0;">${currentTournMode === "ACTIVE" ? "Активных турниров пока нет." : "Архив игр пуст."}</p></div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            filtered.forEach(t => {
+                const isJoined = t.players.some(p => String(p.tg_id) === currentTgId);
+                const badge = isJoined ? `<span style="color:var(--green); font-size:11px; font-weight:800;">✅ ВЫ ЗАПИСАНЫ</span>` : `<span style="color:var(--gold); font-size:11px;">${t.players.length}/${t.max_players} мест</span>`;
+                container.innerHTML += `
+                    <div class="card ${t.status === 'ACTIVE' ? 'card-gold' : ''}" style="cursor:pointer;" onclick='openTournModal(${JSON.stringify(t).replace(/'/g, "&#39;")})'>
+                        <div class="card-title" style="margin-bottom:6px;">
+                            <span>${t.title}</span>
+                            ${badge}
+                        </div>
+                        <div style="font-size:12px; color:var(--green); margin-bottom:4px;">📅 ${t.date_time}</div>
+                        <div style="font-size:12px; color:var(--muted);">💰 Взнос: ${t.buyin}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function openTournModal(t) {
+            selectedTourn = t;
+            document.getElementById('td-title').innerText = t.title;
+            document.getElementById('td-date').innerText = "📅 " + t.date_time;
+            document.getElementById('td-tab-desc').innerText = t.description || "Описание не указано.";
+            document.getElementById('td-tab-blinds').innerText = t.blinds || "Стандартная сетка блайндов X CLUB.";
+
+            const playersHtml = t.players.length > 0
+                ? t.players.map((p, i) => `${i + 1}. <b>${p.name}</b> ${p.status === 'VIP' ? '<span style="color:var(--gold)">[VIP]</span>' : ''}`).join("<br>")
+                : "Пока никто не записался.";
+
+            document.getElementById('td-tab-format').innerHTML = `
+                <b>Взнос / Вход:</b> ${t.buyin}<br>
+                <b>Занято мест за столом:</b> ${t.players.length} из ${t.max_players}<br><br>
+                <b>Список участников:</b><br>
+                <div style="background:var(--card-light); padding:10px; border-radius:10px; margin-top:6px;">${playersHtml}</div>
+            `;
+
+            const actionWrap = document.getElementById('td-action-wrap');
+            if (t.status !== "ACTIVE") {
+                actionWrap.innerHTML = `<div style="text-align:center; color:var(--muted); font-size:12px;">Турнир завершён и перенесён в архив.</div>`;
+            } else if (t.players.some(p => String(p.tg_id) === currentTgId)) {
+                actionWrap.innerHTML = `<button class="btn btn-outline" disabled>✅ Вы уже записаны на этот турнир</button>`;
+            } else if (t.players.length >= t.max_players) {
+                actionWrap.innerHTML = `<button class="btn btn-red" disabled>Мест за столом больше нет</button>`;
+            } else {
+                actionWrap.innerHTML = `<button class="btn btn-gold" onclick="joinTournament('${t.id}')">Записаться на турнир </button>`;
+            }
+
+            switchTournDetailTab('desc', document.querySelector('#tourn-detail-overlay .sub-tab'));
+            document.getElementById('tourn-detail-overlay').classList.add('show');
+        }
+
+        function closeTournModal() {
+            document.getElementById('tourn-detail-overlay').classList.remove('show');
+        }
+
+        function switchTournDetailTab(pane, el) {
+            el.parentElement.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            document.querySelectorAll('.td-pane').forEach(p => p.style.display = 'none');
+            document.getElementById('td-tab-' + pane).style.display = 'block';
+        }
+        async function joinTournament(tId) {
+            closeTournModal();
+            document.getElementById('loader').classList.add('show');
+            try {
+                await fetch(`${SCRIPT_URL}?action=join_tournament&tg_id=${currentTgId}&t_id=${tId}&name=${encodeURIComponent(appData.name)}&status=${encodeURIComponent(appData.status)}`, { mode: "no-cors" });
+            } catch (e) {}
+            setTimeout(() => {
+                document.getElementById('loader').classList.remove('show');
+                loadData();
+            }, 1500);
+        }
+
         function closeVipModal() {
             localStorage.setItem('vip_seen_' + currentTgId, 'true');
             document.getElementById('vip-overlay').classList.remove('show');
@@ -746,84 +670,133 @@
                 await fetch(`${SCRIPT_URL}?action=register&tg_id=${currentTgId}&name=${encodeURIComponent(name)}&squad=${encodeURIComponent(squad)}`, { mode: "no-cors" });
             } catch (e) {}
 
-            setTimeout(() => { document.getElementById('loader').classList.remove('show'); loadData(); }, 1500);
+            setTimeout(() => {
+                document.getElementById('loader').classList.remove('show');
+                loadData();
+            }, 1500);
         }
 
         function renderAdminList(players) {
             const container = document.getElementById('admin-players-list');
+            const filtered = players.filter(p => String(p.tg_id) !== OWNER_ID);
+            if (filtered.length === 0) {
+                container.innerHTML = `<p style="color:var(--muted);">Пока зарегистрированы только вы (Владелец).</p>`;
+                return;
+            }
             container.innerHTML = "";
-            players.forEach(p => {
-                const isMe = String(p.tg_id) === currentTgId;
+            filtered.forEach(p => {
                 const isVip = p.status === "VIP";
-                const isBanned = p.ban === "ДА";
-                const roleLabel = isMe ? "👑 ВЛАДЕЛЕЦ" : p.status;
+                const isBan = p.ban === "ДА";
+                const vipInfo = isVip && p.vip_until > 0 ? ` (${formatRemainingTime(p.vip_until)})` : "";
 
                 container.innerHTML += `
-                    <div class="list-item" style="padding: 12px 0;">
-                        <div>
-                            <b>${p.name}</b> (${p.squad}) — <span style="color:${isMe || isVip ? 'var(--gold)' : 'var(--green)'}">${roleLabel}</span> 
-                            | Рейтинг: <b>${p.rating}</b>
-                            ${p.role ? `[${p.role}]` : ''} 
-                            ${isBanned ? '<b style="color:var(--red)">[БАН]</b>' : ''}
+                    <div style="background: var(--card-light); padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid ${isBan ? 'var(--red)' : 'var(--border)'};">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <b>${p.name}</b>
+                            <span style="font-size:11px; color:${isVip ? 'var(--gold)' : 'var(--muted)'}; font-weight:700;">${p.status}${vipInfo} • ${p.rating} очк.</span>
                         </div>
+                        <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">${p.squad} ${p.role ? '• 🎖 ' + p.role : ''}</div>
+                        
                         <div>
-                            ${!isMe ? `<button class="btn btn-gold btn-sm" onclick="adminVip('${p.tg_id}', ${isVip})">${isVip ? 'Снять VIP' : 'Дать VIP'}</button>` : ''}
-                            <button class="btn btn-outline btn-sm" onclick="adminRating('${p.tg_id}', ${p.rating})">Рейтинг</button>
-                            <button class="btn btn-outline btn-sm" onclick="adminRole('${p.tg_id}')">Должность</button>
-                            ${!isMe ? `<button class="btn btn-red btn-sm" onclick="adminBan('${p.tg_id}', ${isBanned})">${isBanned ? 'Разбанить' : 'В Бан'}</button>` : ''}
+                            <button class="btn btn-sm ${isVip ? 'btn-outline' : 'btn-gold'}" onclick="adminVip('${p.tg_id}', ${isVip})">${isVip ? 'Снять VIP' : 'Дать VIP'}</button>
+                            <button class="btn btn-sm btn-outline" onclick="adminRating('${p.tg_id}', ${p.rating})">Рейтинг</button>
+                            <button class="btn btn-sm btn-outline" onclick="adminRole('${p.tg_id}', '${p.role}')">Должность</button>
+                            <button class="btn btn-sm ${isBan ? 'btn' : 'btn-red'}" onclick="adminBan('${p.tg_id}', ${isBan})">${isBan ? 'Разбанить' : 'В Бан'}</button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        async function adminUpdate(targetId, field, val, extra = "") {
+        function renderAdminTourns(list) {
+            const container = document.getElementById('admin-tourns-list');
+            const active = list.filter(t => t.status === "ACTIVE");
+            if (active.length === 0) {
+                container.innerHTML = `<p style="color:var(--muted); margin:0;">Нет активных турниров.</p>`;
+                return;
+            }
+            container.innerHTML = "";
+            active.forEach(t => {
+                container.innerHTML += `
+                    <div style="background: var(--card-light); padding: 12px; border-radius: 12px; margin-bottom: 8px;">
+                        <b>${t.title}</b> (${t.date_time})<br>
+                        <span style="font-size:12px; color:var(--green);">Записалось: ${t.players.length}/${t.max_players} чел.</span><br>
+                        <button class="btn btn-sm btn-outline" onclick="archiveTournament('${t.id}')">📁 Завершить и в архив</button>
+                    </div>
+                `;
+            });
+        }
+
+        async function createTournament() {
+            const title = document.getElementById('new-t-title').value.trim();
+            const date_time = document.getElementById('new-t-date').value.trim();
+            const buyin = document.getElementById('new-t-buyin').value.trim();
+            const max_players = document.getElementById('new-t-max').value.trim() || "10";
+            const description = document.getElementById('new-t-desc').value.trim();
+            const blinds = document.getElementById('new-t-blinds').value.trim();
+
+            if (!title || !date_time) return tg.showAlert("Укажи хотя бы название и дату турнира!");
+
             document.getElementById('loader').classList.add('show');
             try {
-                await fetch(`${SCRIPT_URL}?action=admin_update&tg_id=${currentTgId}&target_id=${targetId}&field=${field}&val=${encodeURIComponent(val)}${extra}`, { mode: "no-cors" });
+                const url = `${SCRIPT_URL}?action=add_tournament&tg_id=${currentTgId}&title=${encodeURIComponent(title)}&date_time=${encodeURIComponent(date_time)}&buyin=${encodeURIComponent(buyin)}&max_players=${encodeURIComponent(max_players)}&description=${encodeURIComponent(description)}&blinds=${encodeURIComponent(blinds)}`;
+                await fetch(url, { mode: "no-cors" });
             } catch (e) {}
-            setTimeout(() => { document.getElementById('loader').classList.remove('show'); loadData(); }, 1500);
+
+            setTimeout(() => {
+                document.getElementById('loader').classList.remove('show');
+                loadData();
+            }, 1500);
         }
 
-        function adminVip(targetId, isVip) {
+        async function archiveTournament(tId) {
+            if (!confirm("Перенести этот турнир в архив?")) return;
+            document.getElementById('loader').classList.add('show');
+            try {
+                await fetch(`${SCRIPT_URL}?action=archive_tournament&tg_id=${currentTgId}&t_id=${tId}`, { mode: "no-cors" });
+            } catch (e) {}
+            setTimeout(() => {
+                document.getElementById('loader').classList.remove('show');
+                loadData();
+            }, 1500);
+        }
+
+        async function adminUpdate(targetId, field, val, reason = "", hours = 72) {
+            document.getElementById('loader').classList.add('show');
+            try {
+                await fetch(`${SCRIPT_URL}?action=admin_update&tg_id=${currentTgId}&target_id=${targetId}&field=${field}&val=${encodeURIComponent(val)}&reason=${encodeURIComponent(reason)}&hours=${hours}`, { mode: "no-cors" });
+            } catch (e) {}
+            setTimeout(() => {
+                document.getElementById('loader').classList.remove('show');
+                loadData();
+            }, 1500);
+        }
+
+        function adminVip(id, isVip) {
             if (isVip) {
-                adminUpdate(targetId, 'vip', 'ИГРОК');
+                adminUpdate(id, "vip", "ИГРОК");
             } else {
-                const hrs = prompt("На сколько часов выдать V.I.P.? (Например: 72 = 3 дня, 336 = 14 дней / до конца смены):", "72");
-                if (hrs !== null && !isNaN(Number(hrs)) && Number(hrs) > 0) {
-                    adminUpdate(targetId, 'vip', 'VIP', `&hours=${Number(hrs)}`);
-                }
+                const hrs = prompt("На сколько часов выдать V.I.P.? (Например: 24 = 1 день, 72 = 3 дня, 168 = неделя):", "72");
+                if (hrs !== null) adminUpdate(id, "vip", "VIP", "", Number(hrs) || 72);
             }
         }
 
-        function adminRating(targetId, currentRating) {
-            const newRating = prompt("Введи новое количество очков рейтинга для игрока:", currentRating);
-            if (newRating !== null && !isNaN(Number(newRating))) {
-                adminUpdate(targetId, 'rating', Number(newRating));
-            }
+        function adminRating(id, current) {
+            const val = prompt("Введите новое количество очков рейтинга:", current);
+            if (val !== null) adminUpdate(id, "rating", val);
         }
 
-        function adminBan(targetId, isBanned) {
-            if (isBanned) {
-                adminUpdate(targetId, 'ban', 'НЕТ', '&reason=');
+        function adminRole(id, current) {
+            const val = prompt("Введите должность (например: Дилер, Администратор, или оставьте пустым):", current);
+            if (val !== null) adminUpdate(id, "role", val);
+        }
+
+        function adminBan(id, isBan) {
+            if (isBan) {
+                adminUpdate(id, "ban", "НЕТ", "");
             } else {
-                const reason = prompt("Укажи причину бана (например: Нарушение п. 8.2):", "Нарушение правил X club");
-                if (reason !== null) adminUpdate(targetId, 'ban', 'ДА', `&reason=${encodeURIComponent(reason)}`);
-            }
-        }
-
-        function adminRole(targetId) {
-            const role = prompt("Впиши должность (Dealer, Face control, Маркетолог, Дизайнер, Special worker) или оставь пустым чтобы убрать:", "");
-            if (role !== null) adminUpdate(targetId, 'role', role.trim());
-        }
-
-        function switchTab(tabId, el) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
-            if (el) {
-                el.classList.add('active');
-                el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                const reason = prompt("Укажите причину блокировки (Раздел 5):", "Нарушение правил стола");
+                if (reason !== null) adminUpdate(id, "ban", "ДА", reason);
             }
         }
 
