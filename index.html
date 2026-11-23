@@ -360,7 +360,13 @@
 tg.expand();
 
 
-        const user = (tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : { id: "5867953216", first_name: "Админ" };
+        let fallbackId = localStorage.getItem('xclub_device_id');
+if (!fallbackId) {
+    fallbackId = "user_" + Math.floor(Math.random() * 1000000000);
+    localStorage.setItem('xclub_device_id', fallbackId);
+}
+const user = (tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : { id: fallbackId, first_name: "Игрок" };
+
         const currentTgId = String(user.id);
 
                 async function loadData() {
@@ -469,7 +475,7 @@ tg.expand();
             document.getElementById('vip-overlay').classList.remove('show');
         }
 
-        async function registerUser() {
+                async function registerUser() {
             const name = document.getElementById('reg-name').value.trim();
             const squad = document.getElementById('reg-squad').value.trim();
             if (!name || !squad) return tg.showAlert("Заполни Имя и Отряд!");
@@ -477,9 +483,18 @@ tg.expand();
             document.getElementById('reg-overlay').classList.remove('show');
             document.getElementById('loader').classList.add('show');
 
-            await fetch(`${SCRIPT_URL}?action=register&tg_id=${currentTgId}&name=${encodeURIComponent(name)}&squad=${encodeURIComponent(squad)}`);
-            loadData();
+            try {
+                await fetch(`${SCRIPT_URL}?action=register&tg_id=${currentTgId}&name=${encodeURIComponent(name)}&squad=${encodeURIComponent(squad)}`, {
+                    mode: "no-cors"
+                });
+            } catch (e) {}
+
+            setTimeout(() => {
+                document.getElementById('loader').classList.remove('show');
+                loadData();
+            }, 1500);
         }
+
 
         function renderAdminList(players) {
             const container = document.getElementById('admin-players-list');
