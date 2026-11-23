@@ -537,8 +537,11 @@
                 el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
             }
         }
-
+        window.onerror = function(msg, url, line) {
+            tg.showAlert("Ошибка в строке " + line + ": " + msg);
+        };
         loadData();
+
     </script>
 </body>
 </html>
