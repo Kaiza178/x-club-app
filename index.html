@@ -521,11 +521,20 @@ const user = (tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.u
             });
         }
 
-        async function adminUpdate(targetId, field, val, reason = "") {
+                async function adminUpdate(targetId, field, val, reason = "") {
             document.getElementById('loader').classList.add('show');
-            await fetch(`${SCRIPT_URL}?action=admin_update&tg_id=${currentTgId}&target_id=${targetId}&field=${field}&val=${encodeURIComponent(val)}&reason=${encodeURIComponent(reason)}`);
-            loadData();
+            try {
+                await fetch(`${SCRIPT_URL}?action=admin_update&tg_id=${currentTgId}&target_id=${targetId}&field=${field}&val=${encodeURIComponent(val)}&reason=${encodeURIComponent(reason)}`, {
+                    mode: "no-cors"
+                });
+            } catch (e) {}
+
+            setTimeout(() => {
+                document.getElementById('loader').classList.remove('show');
+                loadData();
+            }, 1500);
         }
+
 
         function adminRating(targetId, currentRating) {
             const newRating = prompt("Введи новое количество очков рейтинга для игрока:", currentRating);
