@@ -85,10 +85,15 @@
 
     <div id="loader" class="overlay">
         <div class="loader-logo">
-            <svg width="76" height="76" viewBox="0 0 100 100" fill="none">
-                <path d="M12 10 L35 10 L50 34 L65 10 L88 10 L62 48 L38 48 Z" fill="#0b0d10" stroke="#ffffff" stroke-width="2.5"/>
-                <path d="M18 32 L45 52 L14 90 L38 90 L50 68 L62 90 L86 90 L55 52 L82 32 L60 44 L50 40 L40 44 Z" fill="#00d26a"/>
-            </svg>
+            <svg width="80" height="80" viewBox="0 0 100 100">
+    <defs>
+        <linearGradient id="xSplitBig" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="50%" stop-color="#0b0d10"/>
+            <stop offset="50%" stop-color="#00d26a"/>
+        </linearGradient>
+    </defs>
+    <text x="50" y="84" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-weight="900" font-size="92" fill="url(#xSplitBig)" stroke="#ffffff" stroke-width="2.5">X</text>
+</svg>
         </div>
         <div style="font-weight: 800; color: var(--green); letter-spacing: 1px;">X CLUB TERMINAL...</div>
     </div>
@@ -114,7 +119,7 @@
                 <input type="text" id="reg-nick" class="input" placeholder="Внешний никнейм (логин для входа)">
                 <input type="text" id="reg-squad" class="input" placeholder="Номер отряда (например: 2 отряд)">
                 <input type="password" id="reg-pass" class="input" placeholder="Придумай пароль (например: 1234)">
-                <button class="btn" onclick="registerUser()">Создать аккаунт ♠️</button>
+                <button class="btn" onclick="registerUser()">Создать аккаунт</button>
             </div>
 
             <div id="auth-form-login" style="display:none;">
@@ -187,11 +192,10 @@
         </div>
     </div>
 
-    <div class="header">
+        <div class="header">
         <div class="logo-box">
             <svg width="34" height="34" viewBox="0 0 100 100" fill="none">
-                <path d="M12 10 L35 10 L50 34 L65 10 L88 10 L62 48 L38 48 Z" fill="#0b0d10" stroke="#ffffff" stroke-width="2.5"/>
-                <path d="M18 32 L45 52 L14 90 L38 90 L50 68 L62 90 L86 90 L55 52 L82 32 L60 44 L50 40 L40 44 Z" fill="#00d26a"/>
+                ...
             </svg>
             <div class="logo-text"><span>X</span> CLUB</div>
         </div>
@@ -278,12 +282,12 @@
         <div class="card">
             <div class="card-title">📑 Документы и связь</div>
             <p style="font-size: 13px;">Официальное Положение о проведении игр, комбинации и новости клуба:</p>
-            <a href="https://github.io" target="_blank" class="btn">Открыть файл с правилами (PDF)</a>
-            <a href="https://t.me" target="_blank" class="btn btn-outline">Telegram-канал @X_club_Official</a>
+            <button class="btn" onclick="openExternalUrl('https://github.io')">Открыть файл с правилами (PDF)</button>
+<button class="btn btn-outline" onclick="openTgChannel('https://t.me')">Telegram-канал @X_club_Official</button>
         </div>
 
         <div class="card">
-            <div class="card-title">👑 Привилегии V.I.P. (Раздел 4)</div>
+            <div class="card-title">Привилегии V.I.P. (Раздел 4)</div>
             <div class="list-item">• <b>Бронирование места</b> за игровым столом до старта.</div>
             <div class="list-item">• <b>Бесплатный вход</b> на закрытые и спец. игры (п. 7.2).</div>
             <div class="list-item">• <b>Приоритетное обслуживание</b> без очереди.</div>
@@ -487,14 +491,14 @@
             const bodyEl = document.getElementById('status-modal-body');
 
             if (currentAccId === OWNER_ID) {
-                titleEl.innerText = "👑 Статус: ВЛАДЕЛЕЦ КЛУБА";
+                titleEl.innerText = "Статус: ВЛАДЕЛЕЦ КЛУБА";
                 bodyEl.innerHTML = "Полный административный доступ к терминалу X CLUB, управлению турнирами, рейтингом и базой участников.";
             } else if (appData.status === "VIP") {
                 const isInf = Number(appData.vip_until) === 0;
                 const timeStr = isInf
                     ? `Срок действия: <b style="color:var(--gold); font-size:15px;">∞ (Бессрочно)</b>`
                     : `Осталось: <b style="color:var(--gold);">${formatRemainingTime(appData.vip_until)}</b>`;
-                titleEl.innerText = "👑 Статус: V.I.P. КЛИЕНТ";
+                titleEl.innerText = "Статус: V.I.P. КЛИЕНТ";
                 bodyEl.innerHTML = `
                     <div style="background:rgba(245,185,66,0.12); padding:10px; border-radius:10px; margin-bottom:10px;">${timeStr}</div>
                     <b>Ваши привилегии:</b><br>
@@ -504,7 +508,7 @@
                     <b>Как продлить:</b> обратитесь к Владельцу или Администратору X CLUB.
                 `;
             } else {
-                titleEl.innerText = "♠️ Статус: ИГРОК";
+                titleEl.innerText = "Статус: ИГРОК";
                 bodyEl.innerHTML = `
                     Базовый статус участника клуба <b>X CLUB</b>.<br><br>
                     <b style="color:var(--gold);">Что даёт статус V.I.P.:</b><br>
@@ -561,7 +565,7 @@
                 document.getElementById('prof-name').innerText = data.name;
                 document.getElementById('prof-nick').innerText = cleanNick;
                 document.getElementById('prof-squad').innerText = data.squad;
-                document.getElementById('prof-status').innerText = (currentAccId === OWNER_ID) ? "👑 ВЛАДЕЛЕЦ КЛУБА" : data.status;
+                document.getElementById('prof-status').innerText = (currentAccId === OWNER_ID) ? "ВЛАДЕЛЕЦ КЛУБА" : data.status;
                 document.getElementById('prof-id').innerText = currentAccId;
 
                 const avEl = document.getElementById('prof-avatar');
@@ -581,13 +585,13 @@
                 headerBadge.classList.remove('vip', 'owner');
 
                 if (currentAccId === OWNER_ID) {
-                    headerBadge.innerText = "👑 ВЛАДЕЛЕЦ";
+                    headerBadge.innerText = "ВЛАДЕЛЕЦ";
                     headerBadge.classList.add('owner');
                     document.getElementById('prof-owner-badge').style.display = 'inline-block';
                     document.getElementById('profile-main-card').classList.add('card-gold');
                     document.getElementById('btn-delete-acc').style.display = 'none';
                 } else if (data.status === "VIP") {
-                    headerBadge.innerText = "👑 V.I.P.";
+                    headerBadge.innerText = "V.I.P.";
                     headerBadge.classList.add('vip');
                     document.getElementById('prof-vip-timer-wrap').style.display = 'block';
                     document.getElementById('prof-vip-until').innerText = formatRemainingTime(data.vip_until);
@@ -786,7 +790,7 @@
             } else if (t.players.length >= t.max_players) {
                 actionWrap.innerHTML = `<button class="btn btn-gold" onclick="joinTournament('${t.id}')">Встать в очередь (лист ожидания) ⏳</button>`;
             } else {
-                actionWrap.innerHTML = `<button class="btn btn-gold" onclick="joinTournament('${t.id}')">Записаться на турнир ♠️</button>`;
+                actionWrap.innerHTML = `<button class="btn btn-gold" onclick="joinTournament('${t.id}')">Записаться на турнир</button>`;
             }
 
             switchTournDetailTab('desc', document.querySelector('#tourn-detail-overlay .sub-tab'));
@@ -965,6 +969,21 @@
             } else {
                 const reason = prompt("Укажите причину блокировки (Раздел 5):", "Нарушение правил стола");
                 if (reason !== null) adminUpdate(id, "ban", "ДА", reason);
+            }
+        }
+        function openExternalUrl(url) {
+            if (tg && tg.openLink) {
+                tg.openLink(url);
+            } else {
+                window.open(url, '_blank');
+            }
+        }
+
+        function openTgChannel(url) {
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink(url);
+            } else {
+                window.open(url, '_blank');
             }
         }
 
