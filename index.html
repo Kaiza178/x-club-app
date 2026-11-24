@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>X CLUB</title>
     <script src="https://telegram.org"></script>
     <style>
@@ -17,12 +17,11 @@
             --muted: #8b949e;
             --border: rgba(255, 255, 255, 0.08);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 16px; padding-bottom: 92px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text); padding: 16px; padding-top: calc(16px + env(safe-area-inset-top)); padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
         
-        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
         .logo-box { display: flex; align-items: center; gap: 10px; }
-        .logo-img { width: 38px; height: 38px; border-radius: 8px; object-fit: cover; border: 1px solid var(--gold); }
         .logo-text { font-size: 22px; font-weight: 900; letter-spacing: 2px; }
         .logo-text span { color: var(--green); }
         
@@ -30,13 +29,13 @@
         .badge.vip { background: rgba(245, 185, 66, 0.15); color: var(--gold); border-color: rgba(245, 185, 66, 0.4); }
         .badge.owner { background: linear-gradient(135deg, rgba(245, 185, 66, 0.25), rgba(255, 149, 0, 0.25)); color: var(--gold); border-color: var(--gold); box-shadow: 0 0 12px rgba(245, 185, 66, 0.25); }
         
-        .card { background: var(--card); border-radius: 16px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--border); }
+        .card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 14px; border: 1px solid var(--border); }
         .card-gold { border-color: rgba(245, 185, 66, 0.4); background: linear-gradient(180deg, rgba(245, 185, 66, 0.08) 0%, var(--card) 100%); }
-        .card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
+        .card-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
         
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
         .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 6px; text-align: center; }
-        .stat-val { font-size: 18px; font-weight: 800; color: var(--green); }
+        .stat-val { font-size: 17px; font-weight: 800; color: var(--green); }
         .stat-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
         
         p { font-size: 14px; line-height: 1.5; color: #d0d7de; margin-bottom: 10px; }
@@ -47,26 +46,26 @@
         .btn-gold { background: var(--gold); color: #000; }
         .btn-red { background: var(--red); color: #fff; }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-        .btn-sm { padding: 7px 11px; font-size: 12px; display: inline-block; width: auto; margin-top: 6px; margin-right: 4px; }
+        .btn-sm { padding: 7px 10px; font-size: 12px; display: inline-block; width: auto; margin-top: 6px; margin-right: 4px; }
         
         .sub-tabs { display: flex; gap: 6px; margin-bottom: 14px; background: var(--card-light); padding: 4px; border-radius: 10px; }
-        .sub-tab { flex: 1; text-align: center; padding: 8px; font-size: 12px; font-weight: 700; border-radius: 8px; color: var(--muted); cursor: pointer; }
+        .sub-tab { flex: 1; text-align: center; padding: 8px 4px; font-size: 12px; font-weight: 700; border-radius: 8px; color: var(--muted); cursor: pointer; }
         .sub-tab.active { background: var(--card); color: var(--green); }
         
-        .input { width: 100%; background: var(--card-light); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 10px; font-size: 14px; margin-bottom: 10px; outline: none; }
+        /* Шрифт 16px убирает автоматический зум экрана на iPhone при нажатии на поле */
+        .input { width: 100%; background: var(--card-light); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 10px; font-size: 16px; margin-bottom: 10px; outline: none; }
         textarea.input { resize: vertical; min-height: 75px; }
         
         .section { display: none; }
         .section.active { display: block; }
         
-        .tabs-wrapper { position: fixed; bottom: 0; left: 0; right: 0; background: #111418; border-top: 1px solid var(--border); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; z-index: 100; }
-        .tabs-wrapper::-webkit-scrollbar { display: none; }
-        .tabs { display: inline-flex; min-width: 100%; padding: 8px 6px; }
-        .tab { flex: 1; min-width: 74px; text-align: center; color: var(--muted); font-size: 10px; font-weight: 600; cursor: pointer; padding: 4px 2px; }
+        .tabs-wrapper { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(17, 20, 24, 0.96); backdrop-filter: blur(12px); border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom); z-index: 100; }
+        .tabs { display: flex; width: 100%; padding: 6px 4px; justify-content: space-around; }
+        .tab { flex: 1; text-align: center; color: var(--muted); font-size: 10px; font-weight: 600; cursor: pointer; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+        .tab svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
         .tab.active { color: var(--green); }
-        .tab span.icon { display: block; font-size: 18px; margin-bottom: 3px; }
         
-        .overlay { position: fixed; inset: 0; background: rgba(11, 13, 16, 0.96); z-index: 999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .overlay { position: fixed; inset: 0; background: rgba(11, 13, 16, 0.97); z-index: 999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
         .overlay.show { display: flex; }
         .modal-box { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px; width: 100%; max-width: 420px; max-height: 88vh; overflow-y: auto; }
         .ban-screen { background: #1a0808; border: 2px solid var(--red); text-align: center; }
@@ -76,30 +75,54 @@
         .rank-row.me { border: 1px solid var(--green); }
         .rank-num { font-weight: 800; width: 28px; color: var(--gold); }
         .rank-pts { font-weight: 800; color: var(--green); }
+
+        .avatar-circle { width: 54px; height: 54px; border-radius: 50%; background: var(--card-light); border: 2px solid var(--green); object-fit: cover; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; color: var(--green); overflow: hidden; flex-shrink: 0; }
+        @keyframes pulseLogo { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.07); opacity: 0.85; } }
+        .loader-logo { animation: pulseLogo 1.5s infinite ease-in-out; margin-bottom: 14px; }
     </style>
 </head>
 <body>
 
     <div id="loader" class="overlay">
-        <div style="font-size: 32px; margin-bottom: 12px;">♠️</div>
-        <div style="font-weight: 700; color: var(--green);">Синхронизация терминала X CLUB...</div>
-    </div>
-
-    <div id="not-tg-overlay" class="overlay">
-        <div class="modal-box" style="text-align: center;">
-            <div style="font-size: 42px; margin-bottom: 12px;">🔒</div>
-            <div style="font-size: 18px; font-weight: 800; margin-bottom: 8px;">Доступ только через Telegram</div>
-            <p style="font-size: 13px; color: var(--muted);">Открой это приложение через официального бота X CLUB в Telegram, чтобы система привязала твой личный аккаунт без дубликатов.</p>
+        <div class="loader-logo">
+            <svg width="76" height="76" viewBox="0 0 100 100" fill="none">
+                <path d="M12 10 L35 10 L50 34 L65 10 L88 10 L62 48 L38 48 Z" fill="#0b0d10" stroke="#ffffff" stroke-width="2.5"/>
+                <path d="M18 32 L45 52 L14 90 L38 90 L50 68 L62 90 L86 90 L55 52 L82 32 L60 44 L50 40 L40 44 Z" fill="#00d26a"/>
+            </svg>
         </div>
+        <div style="font-weight: 800; color: var(--green); letter-spacing: 1px;">X CLUB TERMINAL...</div>
     </div>
 
-    <div id="reg-overlay" class="overlay">
+    <div id="auth-overlay" class="overlay">
         <div class="modal-box">
-            <div style="font-size: 20px; font-weight: 800; color: var(--green); margin-bottom: 6px;">Регистрация в X CLUB</div>
-            <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Заполни карточку участника для прохождения Face Control и участия в зачёте.</p>
-            <input type="text" id="reg-name" class="input" placeholder="Имя и Фамилия (например: Иван Петров)">
-            <input type="text" id="reg-squad" class="input" placeholder="Номер отряда (например: 2 отряд)">
-            <button class="btn" onclick="registerUser()">Создать аккаунт ♠️</button>
+            <div style="display:flex; justify-content:center; margin-bottom:10px;">
+                <svg width="46" height="46" viewBox="0 0 100 100" fill="none">
+                    <path d="M12 10 L35 10 L50 34 L65 10 L88 10 L62 48 L38 48 Z" fill="#0b0d10" stroke="#ffffff" stroke-width="2.5"/>
+                    <path d="M18 32 L45 52 L14 90 L38 90 L50 68 L62 90 L86 90 L55 52 L82 32 L60 44 L50 40 L40 44 Z" fill="#00d26a"/>
+                </svg>
+            </div>
+            <div style="text-align:center; font-size: 20px; font-weight: 900; margin-bottom: 14px;">Терминал <span>X</span> CLUB</div>
+            
+            <div class="sub-tabs">
+                <div class="sub-tab active" id="auth-tab-reg" onclick="switchAuthMode('reg')">Регистрация</div>
+                <div class="sub-tab" id="auth-tab-login" onclick="switchAuthMode('login')">Войти в аккаунт</div>
+            </div>
+
+            <div id="auth-form-reg">
+                <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">Заполни карточку участника для прохождения Face Control и участия в рейтинге.</p>
+                <input type="text" id="reg-name" class="input" placeholder="Клубное имя (Имя и Фамилия)">
+                <input type="text" id="reg-nick" class="input" placeholder="Внешний никнейм (логин для входа)">
+                <input type="text" id="reg-squad" class="input" placeholder="Номер отряда (например: 2 отряд)">
+                <input type="password" id="reg-pass" class="input" placeholder="Придумай пароль (например: 1234)">
+                <button class="btn" onclick="registerUser()">Создать аккаунт ♠️</button>
+            </div>
+
+            <div id="auth-form-login" style="display:none;">
+                <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">Введи внешний ник (или ID) и пароль от существующего аккаунта.</p>
+                <input type="text" id="login-nick" class="input" placeholder="Внешний никнейм или ID">
+                <input type="password" id="login-pass" class="input" placeholder="Пароль">
+                <button class="btn btn-gold" onclick="loginUser()">Войти в терминал 🔑</button>
+            </div>
         </div>
     </div>
 
@@ -113,6 +136,7 @@
                 <div id="ban-reason-text" style="font-size: 14px; font-weight: 700; color: #fff; margin-top: 4px;">—</div>
             </div>
             <p style="font-size: 13px; color: var(--muted);">Согласно п. 5.5 Положения, разблокировка возможна только при внесении компенсации за материальный и моральный ущерб Администрации (от <b>65 чайных пакетиков</b>) по решению Владельца.</p>
+            <button class="btn btn-outline" style="margin-top:14px;" onclick="logoutUser()">Выйти из аккаунта</button>
         </div>
     </div>
 
@@ -151,7 +175,7 @@
 
             <div class="sub-tabs">
                 <div class="sub-tab active" onclick="switchTournDetailTab('desc', this)">Описание</div>
-                <div class="sub-tab" onclick="switchTournDetailTab('format', this)">Взнос и места</div>
+                <div class="sub-tab" onclick="switchTournDetailTab('format', this)">Взнос и списки</div>
                 <div class="sub-tab" onclick="switchTournDetailTab('blinds', this)">Блайнды</div>
             </div>
 
@@ -165,7 +189,10 @@
 
     <div class="header">
         <div class="logo-box">
-            <img id="club-logo-img" src="https://placehold.co" class="logo-img" alt="X">
+            <svg width="34" height="34" viewBox="0 0 100 100" fill="none">
+                <path d="M12 10 L35 10 L50 34 L65 10 L88 10 L62 48 L38 48 Z" fill="#0b0d10" stroke="#ffffff" stroke-width="2.5"/>
+                <path d="M18 32 L45 52 L14 90 L38 90 L50 68 L62 90 L86 90 L55 52 L82 32 L60 44 L50 40 L40 44 Z" fill="#00d26a"/>
+            </svg>
             <div class="logo-text"><span>X</span> CLUB</div>
         </div>
         <div id="header-status" class="badge" onclick="openStatusModal()">ИГРОК</div>
@@ -179,7 +206,7 @@
             </div>
             <div id="home-tourn-title" style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Нет запланированных игр</div>
             <p id="home-tourn-sub" style="font-size: 13px; color: var(--muted); margin-bottom: 10px;">Следите за анонсами в разделе «Турниры».</p>
-            <button class="btn btn-gold" onclick="switchTab('tournament', document.getElementById('nav-tourn'))">Открыть расписание ♠️</button>
+            <button class="btn btn-gold" onclick="switchTab('tournament', document.getElementById('nav-tourn'))">Открыть расписание</button>
         </div>
 
         <div class="grid-3">
@@ -208,8 +235,8 @@
     <!-- 2. ТУРНИРЫ -->
     <div id="tab-tournament" class="section">
         <div class="sub-tabs">
-            <div class="sub-tab active" onclick="switchTournListMode('ACTIVE', this)">🔥 Активные</div>
-            <div class="sub-tab" onclick="switchTournListMode('ARCHIVE', this)">📁 Архив игр</div>
+            <div class="sub-tab active" onclick="switchTournListMode('ACTIVE', this)">Активные</div>
+            <div class="sub-tab" onclick="switchTournListMode('ARCHIVE', this)">Архив игр</div>
         </div>
         <div id="tournaments-list">
             <p style="color: var(--muted);">Загрузка списка турниров...</p>
@@ -219,8 +246,8 @@
     <!-- 3. РЕЙТИНГ -->
     <div id="tab-rating" class="section">
         <div class="card card-gold" style="padding: 14px;">
-            <div class="card-title" style="color: var(--gold); font-size: 14px; margin-bottom: 6px;">💡 Как попасть в таблицу лидеров?</div>
-            <p style="font-size: 12px; color: #d0d7de; margin-bottom: 0;">В рейтинге отображаются только игроки, набравшие <b>от 1 очка и выше</b>. Очки начисляются за участие в официальных турнирах X CLUB и призовые места за финальным столом.</p>
+            <div class="card-title" style="color: var(--gold); font-size: 14px; margin-bottom: 6px;">💡 Как попасть в рейтинг?</div>
+            <p style="font-size: 12px; color: #d0d7de; margin-bottom: 0;">В таблице лидеров отображаются только участники, набравшие <b>от 1 очка и выше</b>. Очки начисляются за участие в турнирах X CLUB и призовые места.</p>
         </div>
 
         <div class="grid-3">
@@ -234,7 +261,7 @@
             </div>
             <div class="stat-box">
                 <div class="stat-val" style="color: var(--gold);" id="rat-total">0</div>
-                <div class="stat-lbl">В рейтинге</div>
+                <div class="stat-lbl">В топе</div>
             </div>
         </div>
 
@@ -246,12 +273,13 @@
         </div>
     </div>
 
-    <!-- 4. ОРГ. МОМЕНТЫ -->
+    <!-- 4. ИНФО (ОРГ. МОМЕНТЫ) -->
     <div id="tab-org" class="section">
         <div class="card">
-            <div class="card-title">📄 Официальный регламент</div>
-            <p style="font-size: 13px;">Полное Положение о проведении мероприятий и внутренний устав клуба <b>X club</b>:</p>
-            <a id="rules-doc-link" href="https://google.com" target="_blank" class="btn btn-outline">Открыть файл с правилами 📑</a>
+            <div class="card-title">📑 Документы и связь</div>
+            <p style="font-size: 13px;">Официальное Положение о проведении игр, комбинации и новости клуба:</p>
+            <a href="https://github.io" target="_blank" class="btn">Открыть файл с правилами (PDF)</a>
+            <a href="https://t.me" target="_blank" class="btn btn-outline">Telegram-канал @X_club_Official</a>
         </div>
 
         <div class="card">
@@ -259,7 +287,7 @@
             <div class="list-item">• <b>Бронирование места</b> за игровым столом до старта.</div>
             <div class="list-item">• <b>Бесплатный вход</b> на закрытые и спец. игры (п. 7.2).</div>
             <div class="list-item">• <b>Приоритетное обслуживание</b> без очереди.</div>
-            <div class="list-item" style="color: var(--muted); font-size: 12px;">Статус выдаётся Владельцем на фиксированный срок. Нажмите на свой статус в правом верхнем углу экрана, чтобы проверить срок действия или условия продления.</div>
+            <div class="list-item" style="color: var(--muted); font-size: 12px;">Нажмите на свой статус в правом верхнем углу экрана, чтобы проверить срок действия или условия продления.</div>
         </div>
 
         <div class="card">
@@ -268,46 +296,36 @@
             <div class="list-item">• <b>Чёрный список (п. 5.5):</b> Выход из бана возможен только после компенсации ущерба Администрации (от <b>65 чайных пакетиков</b>).</div>
         </div>
     </div>
-    <!-- 5. ПРАВИЛА -->
-    <div id="tab-rules" class="section">
-        <div class="card">
-            <div class="card-title">🃏 Комбинации покера</div>
-            <div class="list-item"><b>1. Роял-флеш:</b> A-K-Q-J-10 одной масти</div>
-            <div class="list-item"><b>2. Стрит-флеш:</b> 5 карт по порядку одной масти</div>
-            <div class="list-item"><b>3. Каре:</b> 4 карты одного достоинства</div>
-            <div class="list-item"><b>4. Фулл-хаус:</b> Тройка + Пара</div>
-            <div class="list-item"><b>5. Флеш:</b> Любые 5 карт одной масти</div>
-            <div class="list-item"><b>6. Стрит:</b> 5 карт по порядку разных мастей</div>
-            <div class="list-item"><b>7. Сет (Тройка):</b> 3 карты одного ранга</div>
-            <div class="list-item"><b>8. Две пары / Одна пара / Старшая карта</b></div>
-        </div>
-        <div class="card" style="border-color: rgba(255,59,48,0.35);">
-            <div class="card-title" style="color: var(--red);">🚫 Запрещено за столом</div>
-            <p>Подсказки зрителей, тимплей, сокрытие номиналов фишек (п. 3.3), оскорбления и провокации. За нарушение — бан (Раздел 5).</p>
-        </div>
-    </div>
-
-    <!-- 6. ПРОФИЛЬ -->
+    <!-- 5. ПРОФИЛЬ -->
     <div id="tab-profile" class="section">
         <div class="card" id="profile-main-card">
-            <div class="card-title">
-                <span>🪪 Карточка участника</span>
-                <span id="prof-owner-badge" style="display: none; color: var(--gold); font-size: 12px;">👑 ВЛАДЕЛЕЦ</span>
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border);">
+                <div id="prof-avatar" class="avatar-circle">X</div>
+                <div>
+                    <div style="font-size: 17px; font-weight: 800;" id="prof-name-top">—</div>
+                    <div style="font-size: 13px; color: var(--green);" id="prof-nick-top">@—</div>
+                    <span id="prof-owner-badge" style="display: none; color: var(--gold); font-size: 11px; font-weight: 800; margin-top: 3px;">👑 ВЛАДЕЛЕЦ КЛУБА</span>
+                </div>
             </div>
-            <div class="list-item"><b>Имя:</b> <span id="prof-name">—</span></div>
+
+            <div class="list-item"><b>Клубное имя:</b> <span id="prof-name">—</span></div>
+            <div class="list-item"><b>Внешний ник:</b> <span id="prof-nick">—</span></div>
             <div class="list-item"><b>Отряд:</b> <span id="prof-squad">—</span></div>
             <div class="list-item"><b>Статус:</b> <span id="prof-status" style="color: var(--green); font-weight: 700;">—</span></div>
-            <div class="list-item" id="prof-vip-timer-wrap" style="display: none;"><b>V.I.P. действует до:</b> <span id="prof-vip-until" style="color: var(--gold); font-weight: 700;">—</span></div>
+            <div class="list-item" id="prof-vip-timer-wrap" style="display: none;"><b>V.I.P. действует:</b> <span id="prof-vip-until" style="color: var(--gold); font-weight: 700;">—</span></div>
             <div class="list-item" id="prof-role-wrap" style="display: none;"><b>Должность:</b> <span id="prof-role" style="color: var(--gold);">—</span></div>
-            <div class="list-item"><b>Telegram ID:</b> <span id="prof-id" style="color: var(--muted);">—</span></div>
+            <div class="list-item"><b>ID аккаунта:</b> <span id="prof-id" style="color: var(--muted);">—</span></div>
         </div>
+
+        <button class="btn btn-outline" onclick="logoutUser()">Выйти из аккаунта (Log out)</button>
+        <button id="btn-delete-acc" class="btn btn-red" style="margin-top: 10px;" onclick="deleteAccount()">Удалить аккаунт навсегда</button>
     </div>
 
-    <!-- 7. АДМИН-ПАНЕЛЬ -->
+    <!-- 6. АДМИН-ПАНЕЛЬ -->
     <div id="tab-admin" class="section">
         <div class="sub-tabs">
-            <div class="sub-tab active" onclick="switchAdminSubTab('players', this)">👥 Игроки</div>
-            <div class="sub-tab" onclick="switchAdminSubTab('tourns', this)">🏆 Турниры</div>
+            <div class="sub-tab active" onclick="switchAdminSubTab('players', this)">Игроки</div>
+            <div class="sub-tab" onclick="switchAdminSubTab('tourns', this)">Турниры</div>
         </div>
 
         <div id="admin-sub-players">
@@ -322,30 +340,54 @@
                 <div class="card-title" style="color: var(--gold);">➕ Создать новый турнир</div>
                 <input type="text" id="new-t-title" class="input" placeholder="Название (например: Вечерний Кубок X CLUB)">
                 <input type="text" id="new-t-date" class="input" placeholder="Дата и время (например: Завтра, 20:30)">
-                <input type="text" id="new-t-buyin" class="input" placeholder="Взнос / Вход (например: 20 чайных пакетиков / VIP бесплатно)">
+                <input type="text" id="new-t-buyin" class="input" placeholder="Взнос (например: 20 чайных пакетиков / VIP бесплатно)">
                 <input type="number" id="new-t-max" class="input" placeholder="Максимум мест за столом (например: 10)">
-                <textarea id="new-t-desc" class="input" placeholder="Описание турнира, призовой фонд и формат игры..."></textarea>
-                <textarea id="new-t-blinds" class="input" placeholder="Сетка блайндов (например: Ур.1: 10/20 (10 мин)...)"></textarea>
-                <button class="btn btn-gold" onclick="createTournament()">Опубликовать турнир ♠️</button>
+                <textarea id="new-t-desc" class="input" placeholder="Описание турнира, призы и формат..."></textarea>
+                
+                <div style="font-size: 12px; color: var(--muted); margin-bottom: 6px;">Выбрать сетку блайндов в 1 клик:</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
+                    <button type="button" class="btn btn-sm btn-outline" onclick="setBlindsPreset('turbo')">⚡ Турбо (5 мин)</button>
+                    <button type="button" class="btn btn-sm btn-outline" onclick="setBlindsPreset('classic')">♠️ Классика (10 мин)</button>
+                    <button type="button" class="btn btn-sm btn-outline" onclick="setBlindsPreset('deep')">🏆 Финал (15 мин)</button>
+                </div>
+                <textarea id="new-t-blinds" class="input" placeholder="Сетка блайндов..."></textarea>
+                <button class="btn btn-gold" onclick="createTournament()">Опубликовать турнир</button>
             </div>
 
             <div class="card">
-                <div class="card-title">📋 Активные турниры (управление)</div>
-                <div id="admin-tourns-list">Нет активных турниров</div>
+                <div class="card-title">📋 Управление турнирами</div>
+                <div id="admin-tourns-list">Нет турниров</div>
             </div>
         </div>
     </div>
 
-    <!-- НИЖНЕЕ МЕНЮ -->
+    <!-- НИЖНЕЕ МЕНЮ С ВЕКТОРНЫМИ ИКОНКАМИ -->
     <div class="tabs-wrapper">
         <div class="tabs">
-            <div class="tab active" id="nav-home" onclick="switchTab('home', this)"><span class="icon">♠️</span>Главная</div>
-            <div class="tab" id="nav-tourn" onclick="switchTab('tournament', this)"><span class="icon">🏆</span>Турниры</div>
-            <div class="tab" id="nav-rating" onclick="switchTab('rating', this)"><span class="icon">📊</span>Рейтинг</div>
-            <div class="tab" id="nav-org" onclick="switchTab('org', this)"><span class="icon">📋</span>Орг. мом.</div>
-            <div class="tab" id="nav-rules" onclick="switchTab('rules', this)"><span class="icon">📖</span>Правила</div>
-            <div class="tab" id="nav-profile" onclick="switchTab('profile', this)"><span class="icon">🪪</span>Профиль</div>
-            <div class="tab" id="nav-admin" style="display:none; color: var(--gold);" onclick="switchTab('admin', this)"><span class="icon">👑</span>Админ</div>
+            <div class="tab active" id="nav-home" onclick="switchTab('home', this)">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Главная</span>
+            </div>
+            <div class="tab" id="nav-tourn" onclick="switchTab('tournament', this)">
+                <svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                <span>Турниры</span>
+            </div>
+            <div class="tab" id="nav-rating" onclick="switchTab('rating', this)">
+                <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                <span>Рейтинг</span>
+            </div>
+            <div class="tab" id="nav-org" onclick="switchTab('org', this)">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span>Инфо</span>
+            </div>
+            <div class="tab" id="nav-profile" onclick="switchTab('profile', this)">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Профиль</span>
+            </div>
+            <div class="tab" id="nav-admin" style="display:none; color: var(--gold);" onclick="switchTab('admin', this)">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Админ</span>
+            </div>
         </div>
     </div>
     <script>
@@ -359,30 +401,28 @@
         };
         tg.expand();
 
-        // Железное извлечение настоящего Telegram ID (работает даже при блокировке SDK через VPN)
-        function getRealTelegramId() {
-            if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
-                return String(tg.initDataUnsafe.user.id);
-            }
+        function getTelegramUser() {
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) return tg.initDataUnsafe.user;
             try {
                 const rawHash = window.location.hash.slice(1) || window.location.search.slice(1);
-                const params = new URLSearchParams(rawHash);
-                const tgData = params.get("tgWebAppData");
+                const tgData = new URLSearchParams(rawHash).get("tgWebAppData");
                 if (tgData) {
                     const userParam = new URLSearchParams(tgData).get("user");
-                    if (userParam) {
-                        const parsed = JSON.parse(userParam);
-                        if (parsed && parsed.id) return String(parsed.id);
-                    }
+                    if (userParam) return JSON.parse(userParam);
                 }
             } catch (e) {}
             return null;
         }
 
-        const currentTgId = getRealTelegramId();
+        const tgUser = getTelegramUser();
+        let currentAccId = localStorage.getItem('xclub_session_id');
+        if (!currentAccId && !localStorage.getItem('xclub_logged_out') && tgUser && tgUser.id) {
+            currentAccId = String(tgUser.id);
+            localStorage.setItem('xclub_session_id', currentAccId);
+        }
+
         let appData = null;
         let currentTournMode = "ACTIVE";
-        let selectedTourn = null;
 
         function switchTab(tabId, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -398,7 +438,40 @@
             document.getElementById('admin-sub-tourns').style.display = sub === 'tourns' ? 'block' : 'none';
         }
 
+        function switchAuthMode(mode) {
+            document.getElementById('auth-tab-reg').classList.toggle('active', mode === 'reg');
+            document.getElementById('auth-tab-login').classList.toggle('active', mode === 'login');
+            document.getElementById('auth-form-reg').style.display = mode === 'reg' ? 'block' : 'none';
+            document.getElementById('auth-form-login').style.display = mode === 'login' ? 'block' : 'none';
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('xclub_session_id');
+            localStorage.setItem('xclub_logged_out', 'true');
+            currentAccId = null;
+            appData = null;
+            document.getElementById('ban-overlay').classList.remove('show');
+            document.getElementById('nav-admin').style.display = 'none';
+            switchAuthMode('login');
+            document.getElementById('auth-overlay').classList.add('show');
+        }
+
+        async function deleteAccount() {
+            if (!currentAccId || currentAccId === OWNER_ID) return;
+            if (!confirm("Точно удалить аккаунт навсегда? Все очки рейтинга и статистика пропадут!")) return;
+            document.getElementById('loader').classList.add('show');
+            try {
+                await fetch(`${SCRIPT_URL}?action=delete_account&acc_id=${currentAccId}`, { mode: "no-cors" });
+            } catch (e) {}
+            setTimeout(() => {
+                document.getElementById('loader').classList.remove('show');
+                logoutUser();
+                switchAuthMode('reg');
+            }, 1500);
+        }
+
         function formatRemainingTime(untilMs) {
+            if (Number(untilMs) === 0) return "∞ (Бессрочно)";
             const diff = untilMs - Date.now();
             if (diff <= 0) return "Срок истёк";
             const hrs = Math.floor(diff / (1000 * 60 * 60));
@@ -413,13 +486,14 @@
             const titleEl = document.getElementById('status-modal-title');
             const bodyEl = document.getElementById('status-modal-body');
 
-            if (currentTgId === OWNER_ID) {
+            if (currentAccId === OWNER_ID) {
                 titleEl.innerText = "👑 Статус: ВЛАДЕЛЕЦ КЛУБА";
                 bodyEl.innerHTML = "Полный административный доступ к терминалу X CLUB, управлению турнирами, рейтингом и базой участников.";
             } else if (appData.status === "VIP") {
-                const timeStr = appData.vip_until > 0
-                    ? `Осталось: <b style="color:var(--gold);">${formatRemainingTime(appData.vip_until)}</b> (до ${new Date(appData.vip_until).toLocaleString('ru-RU', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})})`
-                    : "Бессрочный статус";
+                const isInf = Number(appData.vip_until) === 0;
+                const timeStr = isInf
+                    ? `Срок действия: <b style="color:var(--gold); font-size:15px;">∞ (Бессрочно)</b>`
+                    : `Осталось: <b style="color:var(--gold);">${formatRemainingTime(appData.vip_until)}</b>`;
                 titleEl.innerText = "👑 Статус: V.I.P. КЛИЕНТ";
                 bodyEl.innerHTML = `
                     <div style="background:rgba(245,185,66,0.12); padding:10px; border-radius:10px; margin-bottom:10px;">${timeStr}</div>
@@ -427,7 +501,7 @@
                     • Бронирование места за столом до старта;<br>
                     • Бесплатный вход на закрытые игры (п. 7.2);<br>
                     • Приоритетное обслуживание.<br><br>
-                    <b>Как продлить:</b> обратитесь к Владельцу или Администратору X CLUB до истечения таймера.
+                    <b>Как продлить:</b> обратитесь к Владельцу или Администратору X CLUB.
                 `;
             } else {
                 titleEl.innerText = "♠️ Статус: ИГРОК";
@@ -437,7 +511,7 @@
                     • Предварительная бронь места за столом;<br>
                     • Бесплатный вход на закрытые турниры;<br>
                     • Приоритетное обслуживание.<br><br>
-                    <b>Как получить:</b> выдаётся Владельцем клуба за активность, победы или по условиям смены (Раздел 4 Положения).
+                    <b>Как получить:</b> выдаётся Владельцем клуба за активность или победы (Раздел 4 Положения).
                 `;
             }
             document.getElementById('status-info-overlay').classList.add('show');
@@ -446,19 +520,23 @@
         function closeStatusModal() {
             document.getElementById('status-info-overlay').classList.remove('show');
         }
-
         async function loadData() {
-            if (!currentTgId) {
-                document.getElementById('not-tg-overlay').classList.add('show');
+            if (!currentAccId) {
+                document.getElementById('auth-overlay').classList.add('show');
                 return;
             }
+            document.getElementById('loader').classList.add('show');
             try {
-                const res = await fetch(`${SCRIPT_URL}?action=get&tg_id=${currentTgId}`, { method: "GET", redirect: "follow" });
+                const res = await fetch(`${SCRIPT_URL}?action=get&acc_id=${currentAccId}`, { method: "GET", redirect: "follow" });
                 const data = await res.json();
+                document.getElementById('loader').classList.remove('show');
                 appData = data;
 
                 if (!data.found) {
-                    document.getElementById('reg-overlay').classList.add('show');
+                    if (tgUser && tgUser.username && !document.getElementById('reg-nick').value) {
+                        document.getElementById('reg-nick').value = tgUser.username;
+                    }
+                    document.getElementById('auth-overlay').classList.add('show');
                     return;
                 }
 
@@ -471,16 +549,28 @@
                 const rankText = data.rank !== "—" ? `#${data.rank}` : "—";
                 document.getElementById('home-rank').innerText = rankText;
                 document.getElementById('home-rating').innerText = data.rating;
-                document.getElementById('home-status-short').innerText = (currentTgId === OWNER_ID) ? "ВЛАДЕЛЕЦ" : data.status;
+                document.getElementById('home-status-short').innerText = (currentAccId === OWNER_ID) ? "ВЛАДЕЛЕЦ" : data.status;
 
                 document.getElementById('rat-rank').innerText = rankText;
                 document.getElementById('rat-pts').innerText = data.rating;
                 document.getElementById('rat-total').innerText = data.leaderboard ? data.leaderboard.length : 0;
 
+                const cleanNick = data.nickname ? (data.nickname.startsWith('@') ? data.nickname : '@' + data.nickname) : '—';
+                document.getElementById('prof-name-top').innerText = data.name;
+                document.getElementById('prof-nick-top').innerText = cleanNick;
                 document.getElementById('prof-name').innerText = data.name;
+                document.getElementById('prof-nick').innerText = cleanNick;
                 document.getElementById('prof-squad').innerText = data.squad;
-                document.getElementById('prof-status').innerText = (currentTgId === OWNER_ID) ? "👑 ВЛАДЕЛЕЦ КЛУБА" : data.status;
-                document.getElementById('prof-id').innerText = currentTgId;
+                document.getElementById('prof-status').innerText = (currentAccId === OWNER_ID) ? "👑 ВЛАДЕЛЕЦ КЛУБА" : data.status;
+                document.getElementById('prof-id').innerText = currentAccId;
+
+                const avEl = document.getElementById('prof-avatar');
+                const photoUrl = data.avatar || (tgUser && tgUser.photo_url ? tgUser.photo_url : "");
+                if (photoUrl) {
+                    avEl.innerHTML = `<img src="${photoUrl}" style="width:100%; height:100%; object-fit:cover;">`;
+                } else {
+                    avEl.innerText = data.name ? data.name.charAt(0).toUpperCase() : "X";
+                }
 
                 if (data.role) {
                     document.getElementById('prof-role-wrap').style.display = 'block';
@@ -490,38 +580,94 @@
                 const headerBadge = document.getElementById('header-status');
                 headerBadge.classList.remove('vip', 'owner');
 
-                if (currentTgId === OWNER_ID) {
+                if (currentAccId === OWNER_ID) {
                     headerBadge.innerText = "👑 ВЛАДЕЛЕЦ";
                     headerBadge.classList.add('owner');
-                    document.getElementById('prof-owner-badge').style.display = 'inline';
+                    document.getElementById('prof-owner-badge').style.display = 'inline-block';
                     document.getElementById('profile-main-card').classList.add('card-gold');
+                    document.getElementById('btn-delete-acc').style.display = 'none';
                 } else if (data.status === "VIP") {
                     headerBadge.innerText = "👑 V.I.P.";
                     headerBadge.classList.add('vip');
-                    if (data.vip_until > 0) {
-                        document.getElementById('prof-vip-timer-wrap').style.display = 'block';
-                        document.getElementById('prof-vip-until').innerText = formatRemainingTime(data.vip_until);
-                    }
-                    if (!localStorage.getItem('vip_seen_' + currentTgId)) {
+                    document.getElementById('prof-vip-timer-wrap').style.display = 'block';
+                    document.getElementById('prof-vip-until').innerText = formatRemainingTime(data.vip_until);
+                    if (!localStorage.getItem('vip_seen_' + currentAccId)) {
                         document.getElementById('vip-overlay').classList.add('show');
                     }
                 } else {
                     headerBadge.innerText = data.role ? data.role : "ИГРОК";
-                    localStorage.removeItem('vip_seen_' + currentTgId);
+                    document.getElementById('prof-vip-timer-wrap').style.display = 'none';
+                    localStorage.removeItem('vip_seen_' + currentAccId);
                 }
 
                 renderLeaderboard(data.leaderboard);
                 renderTournaments(data.tournaments || []);
 
                 if (data.isAdmin) {
-                    document.getElementById('nav-admin').style.display = 'block';
+                    document.getElementById('nav-admin').style.display = 'flex';
                     renderAdminList(data.allPlayers);
                     renderAdminTourns(data.tournaments || []);
                 }
             } catch (e) {
+                document.getElementById('loader').classList.remove('show');
                 tg.showAlert("Ошибка связи с сервером: " + e.message);
             }
         }
+
+        async function registerUser() {
+            const name = document.getElementById('reg-name').value.trim();
+            const nick = document.getElementById('reg-nick').value.trim();
+            const squad = document.getElementById('reg-squad').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+            if (!name || !nick || !squad || !pass) return tg.showAlert("Заполни все поля регистрации!");
+
+            const newId = currentAccId || ((tgUser && tgUser.id && !localStorage.getItem('xclub_logged_out')) ? String(tgUser.id) : "ACC_" + Math.floor(100000 + Math.random() * 900000));
+            const avatar = (tgUser && tgUser.photo_url) ? tgUser.photo_url : "";
+
+            document.getElementById('auth-overlay').classList.remove('show');
+            document.getElementById('loader').classList.add('show');
+
+            try {
+                await fetch(`${SCRIPT_URL}?action=register&acc_id=${newId}&name=${encodeURIComponent(name)}&nickname=${encodeURIComponent(nick)}&squad=${encodeURIComponent(squad)}&password=${encodeURIComponent(pass)}&avatar=${encodeURIComponent(avatar)}`, { mode: "no-cors" });
+            } catch (e) {}
+
+            localStorage.setItem('xclub_session_id', newId);
+            localStorage.removeItem('xclub_logged_out');
+            currentAccId = newId;
+
+            setTimeout(() => {
+                loadData();
+            }, 1500);
+        }
+
+        async function loginUser() {
+            const nick = document.getElementById('login-nick').value.trim();
+            const pass = document.getElementById('login-pass').value.trim();
+            if (!nick || !pass) return tg.showAlert("Введи ник и пароль!");
+
+            document.getElementById('auth-overlay').classList.remove('show');
+            document.getElementById('loader').classList.add('show');
+
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=login&nick=${encodeURIComponent(nick)}&pass=${encodeURIComponent(pass)}`, { method: "GET", redirect: "follow" });
+                const data = await res.json();
+                if (data.success && data.acc_id) {
+                    localStorage.setItem('xclub_session_id', data.acc_id);
+                    localStorage.removeItem('xclub_logged_out');
+                    currentAccId = data.acc_id;
+                    loadData();
+                } else {
+                    document.getElementById('loader').classList.remove('show');
+                    document.getElementById('auth-overlay').classList.add('show');
+                    tg.showAlert("Неверный ник или пароль!");
+                }
+            } catch (e) {
+                document.getElementById('loader').classList.remove('show');
+                document.getElementById('auth-overlay').classList.add('show');
+                tg.showAlert("Ошибка входа: " + e.message);
+            }
+        }
+
         function renderLeaderboard(list) {
             const container = document.getElementById('rating-list');
             if (!list || list.length === 0) {
@@ -536,7 +682,7 @@
                 if (pos === 2) medal = "🥈";
                 if (pos === 3) medal = "🥉";
 
-                const isMe = p.tg_id === currentTgId;
+                const isMe = p.tg_id === currentAccId;
                 const vipBadge = p.status === "VIP" ? `<span style="color:var(--gold); font-size:10px; font-weight:bold;">[VIP]</span>` : "";
 
                 container.innerHTML += `
@@ -553,7 +699,6 @@
                 `;
             });
         }
-
         function switchTournListMode(mode, el) {
             currentTournMode = mode;
             el.parentElement.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
@@ -567,7 +712,7 @@
                 const next = activeList.slice().shift();
                 document.getElementById('home-tourn-title').innerText = next.title;
                 document.getElementById('home-tourn-date').innerText = next.date_time;
-                document.getElementById('home-tourn-sub').innerText = `Взнос: ${next.buyin} • Мест: ${next.players.length}/${next.max_players}`;
+                document.getElementById('home-tourn-sub').innerText = `Взнос: ${next.buyin} • Записано: ${next.players.length}/${next.max_players}`;
             } else {
                 document.getElementById('home-tourn-title').innerText = "Нет запланированных игр";
                 document.getElementById('home-tourn-date').innerText = "—";
@@ -583,8 +728,14 @@
 
             container.innerHTML = "";
             filtered.forEach(t => {
-                const isJoined = t.players.some(p => String(p.tg_id) === currentTgId);
-                const badge = isJoined ? `<span style="color:var(--green); font-size:11px; font-weight:800;">✅ ВЫ ЗАПИСАНЫ</span>` : `<span style="color:var(--gold); font-size:11px;">${t.players.length}/${t.max_players} мест</span>`;
+                const idx = t.players.findIndex(p => String(p.tg_id) === currentAccId);
+                let badge = `<span style="color:var(--gold); font-size:11px;">${t.players.length}/${t.max_players} мест</span>`;
+                if (idx !== -1) {
+                    badge = idx < t.max_players
+                        ? `<span style="color:var(--green); font-size:11px; font-weight:800;">✅ В ИГРЕ (#${idx + 1})</span>`
+                        : `<span style="color:var(--gold); font-size:11px; font-weight:800;">⏳ ОЧЕРЕДЬ #${idx - t.max_players + 1}</span>`;
+                }
+
                 container.innerHTML += `
                     <div class="card ${t.status === 'ACTIVE' ? 'card-gold' : ''}" style="cursor:pointer;" onclick='openTournModal(${JSON.stringify(t).replace(/'/g, "&#39;")})'>
                         <div class="card-title" style="margin-bottom:6px;">
@@ -599,32 +750,43 @@
         }
 
         function openTournModal(t) {
-            selectedTourn = t;
             document.getElementById('td-title').innerText = t.title;
             document.getElementById('td-date').innerText = "📅 " + t.date_time;
             document.getElementById('td-tab-desc').innerText = t.description || "Описание не указано.";
             document.getElementById('td-tab-blinds').innerText = t.blinds || "Стандартная сетка блайндов X CLUB.";
 
-            const playersHtml = t.players.length > 0
-                ? t.players.map((p, i) => `${i + 1}. <b>${p.name}</b> ${p.status === 'VIP' ? '<span style="color:var(--gold)">[VIP]</span>' : ''}`).join("<br>")
+            const mainPlayers = t.players.slice(0, t.max_players);
+            const waitList = t.players.slice(t.max_players);
+
+            const mainHtml = mainPlayers.length > 0
+                ? mainPlayers.map((p, i) => `${i + 1}. <b>${p.name}</b> ${p.status === 'VIP' ? '<span style="color:var(--gold)">[VIP]</span>' : ''}`).join("<br>")
                 : "Пока никто не записался.";
+
+            const waitHtml = waitList.length > 0
+                ? `<div style="margin-top:12px;"><b>⏳ Лист ожидания (очередь):</b><div style="background:var(--card-light); padding:10px; border-radius:10px; margin-top:6px;">` +
+                  waitList.map((p, i) => `Очередь #${i + 1}: <b>${p.name}</b> ${p.status === 'VIP' ? '<span style="color:var(--gold)">[VIP]</span>' : ''}`).join("<br>") +
+                  `</div></div>`
+                : "";
 
             document.getElementById('td-tab-format').innerHTML = `
                 <b>Взнос / Вход:</b> ${t.buyin}<br>
-                <b>Занято мест за столом:</b> ${t.players.length} из ${t.max_players}<br><br>
-                <b>Список участников:</b><br>
-                <div style="background:var(--card-light); padding:10px; border-radius:10px; margin-top:6px;">${playersHtml}</div>
+                <b>Основной стол:</b> ${mainPlayers.length} из ${t.max_players} мест<br><br>
+                <b>Основной состав:</b><br>
+                <div style="background:var(--card-light); padding:10px; border-radius:10px; margin-top:6px;">${mainHtml}</div>
+                ${waitHtml}
             `;
 
             const actionWrap = document.getElementById('td-action-wrap');
+            const isJoined = t.players.some(p => String(p.tg_id) === currentAccId);
+
             if (t.status !== "ACTIVE") {
                 actionWrap.innerHTML = `<div style="text-align:center; color:var(--muted); font-size:12px;">Турнир завершён и перенесён в архив.</div>`;
-            } else if (t.players.some(p => String(p.tg_id) === currentTgId)) {
-                actionWrap.innerHTML = `<button class="btn btn-outline" disabled>✅ Вы уже записаны на этот турнир</button>`;
+            } else if (isJoined) {
+                actionWrap.innerHTML = `<button class="btn btn-outline" disabled>✅ Вы уже записаны</button>`;
             } else if (t.players.length >= t.max_players) {
-                actionWrap.innerHTML = `<button class="btn btn-red" disabled>Мест за столом больше нет</button>`;
+                actionWrap.innerHTML = `<button class="btn btn-gold" onclick="joinTournament('${t.id}')">Встать в очередь (лист ожидания) ⏳</button>`;
             } else {
-                actionWrap.innerHTML = `<button class="btn btn-gold" onclick="joinTournament('${t.id}')">Записаться на турнир </button>`;
+                actionWrap.innerHTML = `<button class="btn btn-gold" onclick="joinTournament('${t.id}')">Записаться на турнир ♠️</button>`;
             }
 
             switchTournDetailTab('desc', document.querySelector('#tourn-detail-overlay .sub-tab'));
@@ -641,39 +803,31 @@
             document.querySelectorAll('.td-pane').forEach(p => p.style.display = 'none');
             document.getElementById('td-tab-' + pane).style.display = 'block';
         }
+
         async function joinTournament(tId) {
             closeTournModal();
             document.getElementById('loader').classList.add('show');
             try {
-                await fetch(`${SCRIPT_URL}?action=join_tournament&tg_id=${currentTgId}&t_id=${tId}&name=${encodeURIComponent(appData.name)}&status=${encodeURIComponent(appData.status)}`, { mode: "no-cors" });
+                await fetch(`${SCRIPT_URL}?action=join_tournament&acc_id=${currentAccId}&t_id=${tId}&name=${encodeURIComponent(appData.name)}&nickname=${encodeURIComponent(appData.nickname || "")}&status=${encodeURIComponent(appData.status)}`, { mode: "no-cors" });
             } catch (e) {}
             setTimeout(() => {
-                document.getElementById('loader').classList.remove('show');
                 loadData();
             }, 1500);
         }
-
         function closeVipModal() {
-            localStorage.setItem('vip_seen_' + currentTgId, 'true');
+            localStorage.setItem('vip_seen_' + currentAccId, 'true');
             document.getElementById('vip-overlay').classList.remove('show');
         }
 
-        async function registerUser() {
-            const name = document.getElementById('reg-name').value.trim();
-            const squad = document.getElementById('reg-squad').value.trim();
-            if (!name || !squad) return tg.showAlert("Заполни Имя и Отряд!");
-
-            document.getElementById('reg-overlay').classList.remove('show');
-            document.getElementById('loader').classList.add('show');
-
-            try {
-                await fetch(`${SCRIPT_URL}?action=register&tg_id=${currentTgId}&name=${encodeURIComponent(name)}&squad=${encodeURIComponent(squad)}`, { mode: "no-cors" });
-            } catch (e) {}
-
-            setTimeout(() => {
-                document.getElementById('loader').classList.remove('show');
-                loadData();
-            }, 1500);
+        function setBlindsPreset(type) {
+            const area = document.getElementById('new-t-blinds');
+            if (type === 'turbo') {
+                area.value = "⚡ ТУРБО (уровни по 5 минут):\nУр. 1: 10 / 20\nУр. 2: 20 / 40\nУр. 3: 30 / 60\nУр. 4: 50 / 100\nУр. 5: 100 / 200\nУр. 6: 200 / 400";
+            } else if (type === 'classic') {
+                area.value = "♠️ КЛАССИКА X CLUB (уровни по 10 минут):\nУр. 1: 5 / 10\nУр. 2: 10 / 20\nУр. 3: 15 / 30\nУр. 4: 25 / 50\nУр. 5: 50 / 100\nУр. 6: 100 / 200";
+            } else if (type === 'deep') {
+                area.value = "🏆 ФИНАЛ / ГЛУБОКИЙ СТЕК (уровни по 15 минут):\nУр. 1: 5 / 10\nУр. 2: 10 / 20\nУр. 3: 15 / 30\nУр. 4: 20 / 40\nУр. 5: 30 / 60\nУр. 6: 50 / 100\nУр. 7: 75 / 150";
+            }
         }
 
         function renderAdminList(players) {
@@ -687,7 +841,7 @@
             filtered.forEach(p => {
                 const isVip = p.status === "VIP";
                 const isBan = p.ban === "ДА";
-                const vipInfo = isVip && p.vip_until > 0 ? ` (${formatRemainingTime(p.vip_until)})` : "";
+                const vipInfo = isVip ? ` (${formatRemainingTime(p.vip_until)})` : "";
 
                 container.innerHTML += `
                     <div style="background: var(--card-light); padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid ${isBan ? 'var(--red)' : 'var(--border)'};">
@@ -695,7 +849,7 @@
                             <b>${p.name}</b>
                             <span style="font-size:11px; color:${isVip ? 'var(--gold)' : 'var(--muted)'}; font-weight:700;">${p.status}${vipInfo} • ${p.rating} очк.</span>
                         </div>
-                        <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">${p.squad} ${p.role ? '• 🎖 ' + p.role : ''}</div>
+                        <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">${p.squad} ${p.nickname ? '• @' + p.nickname.replace('@','') : ''} ${p.role ? '• 🎖 ' + p.role : ''}</div>
                         
                         <div>
                             <button class="btn btn-sm ${isVip ? 'btn-outline' : 'btn-gold'}" onclick="adminVip('${p.tg_id}', ${isVip})">${isVip ? 'Снять VIP' : 'Дать VIP'}</button>
@@ -710,18 +864,24 @@
 
         function renderAdminTourns(list) {
             const container = document.getElementById('admin-tourns-list');
-            const active = list.filter(t => t.status === "ACTIVE");
-            if (active.length === 0) {
-                container.innerHTML = `<p style="color:var(--muted); margin:0;">Нет активных турниров.</p>`;
+            if (!list || list.length === 0) {
+                container.innerHTML = `<p style="color:var(--muted); margin:0;">Нет созданных турниров.</p>`;
                 return;
             }
             container.innerHTML = "";
-            active.forEach(t => {
+            list.forEach(t => {
+                const isAct = t.status === "ACTIVE";
                 container.innerHTML += `
-                    <div style="background: var(--card-light); padding: 12px; border-radius: 12px; margin-bottom: 8px;">
-                        <b>${t.title}</b> (${t.date_time})<br>
-                        <span style="font-size:12px; color:var(--green);">Записалось: ${t.players.length}/${t.max_players} чел.</span><br>
-                        <button class="btn btn-sm btn-outline" onclick="archiveTournament('${t.id}')">📁 Завершить и в архив</button>
+                    <div style="background: var(--card-light); padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid ${isAct ? 'rgba(245,185,66,0.3)' : 'var(--border)'};">
+                        <div style="display:flex; justify-content:space-between;">
+                            <b>${t.title}</b>
+                            <span style="font-size:11px; color:${isAct ? 'var(--green)' : 'var(--muted)'};">${isAct ? 'АКТИВЕН' : 'АРХИВ'}</span>
+                        </div>
+                        <div style="font-size:12px; color:var(--muted); margin:4px 0;">${t.date_time} • Записано: ${t.players.length}/${t.max_players}</div>
+                        <div>
+                            ${isAct ? `<button class="btn btn-sm btn-outline" onclick="archiveTournament('${t.id}')">📁 В архив</button>` : ''}
+                            <button class="btn btn-sm btn-red" onclick="deleteTournament('${t.id}')">🗑️ Удалить</button>
+                        </div>
                     </div>
                 `;
             });
@@ -735,16 +895,15 @@
             const description = document.getElementById('new-t-desc').value.trim();
             const blinds = document.getElementById('new-t-blinds').value.trim();
 
-            if (!title || !date_time) return tg.showAlert("Укажи хотя бы название и дату турнира!");
+            if (!title || !date_time) return tg.showAlert("Укажи название и дату турнира!");
 
             document.getElementById('loader').classList.add('show');
             try {
-                const url = `${SCRIPT_URL}?action=add_tournament&tg_id=${currentTgId}&title=${encodeURIComponent(title)}&date_time=${encodeURIComponent(date_time)}&buyin=${encodeURIComponent(buyin)}&max_players=${encodeURIComponent(max_players)}&description=${encodeURIComponent(description)}&blinds=${encodeURIComponent(blinds)}`;
+                const url = `${SCRIPT_URL}?action=add_tournament&acc_id=${currentAccId}&title=${encodeURIComponent(title)}&date_time=${encodeURIComponent(date_time)}&buyin=${encodeURIComponent(buyin)}&max_players=${encodeURIComponent(max_players)}&description=${encodeURIComponent(description)}&blinds=${encodeURIComponent(blinds)}`;
                 await fetch(url, { mode: "no-cors" });
             } catch (e) {}
 
             setTimeout(() => {
-                document.getElementById('loader').classList.remove('show');
                 loadData();
             }, 1500);
         }
@@ -753,10 +912,20 @@
             if (!confirm("Перенести этот турнир в архив?")) return;
             document.getElementById('loader').classList.add('show');
             try {
-                await fetch(`${SCRIPT_URL}?action=archive_tournament&tg_id=${currentTgId}&t_id=${tId}`, { mode: "no-cors" });
+                await fetch(`${SCRIPT_URL}?action=archive_tournament&acc_id=${currentAccId}&t_id=${tId}`, { mode: "no-cors" });
             } catch (e) {}
             setTimeout(() => {
-                document.getElementById('loader').classList.remove('show');
+                loadData();
+            }, 1500);
+        }
+
+        async function deleteTournament(tId) {
+            if (!confirm("Удалить этот турнир навсегда из базы?")) return;
+            document.getElementById('loader').classList.add('show');
+            try {
+                await fetch(`${SCRIPT_URL}?action=delete_tournament&acc_id=${currentAccId}&t_id=${tId}`, { mode: "no-cors" });
+            } catch (e) {}
+            setTimeout(() => {
                 loadData();
             }, 1500);
         }
@@ -764,10 +933,9 @@
         async function adminUpdate(targetId, field, val, reason = "", hours = 72) {
             document.getElementById('loader').classList.add('show');
             try {
-                await fetch(`${SCRIPT_URL}?action=admin_update&tg_id=${currentTgId}&target_id=${targetId}&field=${field}&val=${encodeURIComponent(val)}&reason=${encodeURIComponent(reason)}&hours=${hours}`, { mode: "no-cors" });
+                await fetch(`${SCRIPT_URL}?action=admin_update&acc_id=${currentAccId}&target_id=${targetId}&field=${field}&val=${encodeURIComponent(val)}&reason=${encodeURIComponent(reason)}&hours=${hours}`, { mode: "no-cors" });
             } catch (e) {}
             setTimeout(() => {
-                document.getElementById('loader').classList.remove('show');
                 loadData();
             }, 1500);
         }
@@ -776,8 +944,8 @@
             if (isVip) {
                 adminUpdate(id, "vip", "ИГРОК");
             } else {
-                const hrs = prompt("На сколько часов выдать V.I.P.? (Например: 24 = 1 день, 72 = 3 дня, 168 = неделя):", "72");
-                if (hrs !== null) adminUpdate(id, "vip", "VIP", "", Number(hrs) || 72);
+                const hrs = prompt("На сколько часов выдать V.I.P.? (Введи 0 для бесконечного ∞ статуса, 24 = 1 день, 72 = 3 дня):", "0");
+                if (hrs !== null) adminUpdate(id, "vip", "VIP", "", Number(hrs));
             }
         }
 
